@@ -9,9 +9,9 @@ package pkry;
  *
  * @author rafal
  */
-public class PKRY {}
+public class JOIN
+{
     
     
     
-    
-
+}

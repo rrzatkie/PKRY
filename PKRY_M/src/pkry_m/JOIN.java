@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkry;
+package pkry_m;
 
 /**
  *
  * @author rafal
  */
-public class PKRY {}
-    
-    
-    
-    
 
+private
+public class JOIN {
+    
+    
+}

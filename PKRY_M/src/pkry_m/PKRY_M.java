@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkry;
+package pkry_m;
 
 /**
  *
  * @author rafal
  */
-public class PKRY {}
-    
-    
-    
-    
+public class PKRY_M {
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+    }
+    
+}
