@@ -15,7 +15,9 @@ public class PKRY_M {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+    JOIN join = new JOIN();
+    
+    // TODO code application logic here
     }
     
 }

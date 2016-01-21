@@ -20,7 +20,14 @@ import java.util.logging.Logger;
  */
 public class SETUP {
 
-    public static int l = 20;
+    public static int lp = 10;
+    public static int k = 8;
+    public static int lx = 6;
+    public static int le = 6;
+    public static int lE = 8;
+    public static int lX = 8;
+    public static int eps = 1;
+    
 
     private static final BigInteger TWO = new BigInteger("2");
 
@@ -36,24 +43,40 @@ public class SETUP {
     private static BigInteger h;
     private static BigInteger b;
     
- 
-    
-    
     public static void main(String[] args) {
-        // TODO code application logic here
-        
-        
-        p_=genP_(l);
-        q_=genQ_(l);
+//        SETUP setup = new SETUP();
+        JOIN join = new JOIN();
+    }
+    
+    
+    public SETUP()
+    {
+          
+        p_=genP_(lp);
+        q_=genQ_(lp);
         p =  p_.multiply(TWO).add(BigInteger.ONE);
         q =  q_.multiply(TWO).add(BigInteger.ONE);
         n = p.multiply(q);
-        g = genG(n, l);
+        g = genG(n, lp);
         a = g.modPow(TWO, n);
-        a_o = genA_0(l, a);
-        g_= genG_(l, a, a_o);
-        h = genH(l, a, a_o, g_);
-        b = genB(l, a, a_o, g_, h);
+        a_o = genA_0(lp, a);
+        g_= genG_(lp, a, a_o);
+        h = genH(lp, a, a_o, g_);
+        b = genB(lp, a, a_o, g_, h);
+        
+        StringBuilder sp = new StringBuilder();
+        sp.append(Integer.toBinaryString(lp)).append("%")
+                .append(Integer.toBinaryString(k)).append("%")
+                .append(Integer.toBinaryString(lx)).append("%")
+                .append(Integer.toBinaryString(le)).append("%")
+                .append(Integer.toBinaryString(lE)).append("%")
+                .append(Integer.toBinaryString(lX)).append("%")
+                .append(Integer.toBinaryString(eps)).append("%");
+        try {
+            createFile(sp.toString() , "secureparam.txt");
+        } catch (IOException ex) {
+            Logger.getLogger(SETUP.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         StringBuilder gpsk = new StringBuilder();
         gpsk.append(n.toString(2)).append("%")
@@ -70,13 +93,13 @@ public class SETUP {
         try {
             createFile(gpsk.toString() , "gpsk.txt");
         } catch (IOException ex) {
-            Logger.getLogger(PKRY.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SETUP.class.getName()).log(Level.SEVERE, null, ex);
         }
         
          try {
             createFile(gmsk.toString() , "gmsk.txt");
         } catch (IOException ex) {
-            Logger.getLogger(PKRY.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SETUP.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -106,14 +129,9 @@ public class SETUP {
         BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());
 }
-        while(n.gcd(temp.add(BigInteger.ONE))!= BigInteger.ONE &&
+        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
                 n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
                 !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) );
-                
-        {
-            temp = new BigInteger(l, new Random());  
-            
-        }
         
         return temp;
     }
@@ -145,31 +163,22 @@ public class SETUP {
     private static BigInteger genA_0(int l, BigInteger a) {
       BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(n.gcd(temp.add(BigInteger.ONE))!= BigInteger.ONE &&
+        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
                 n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
                 !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a));
                 
-        {
-            temp = new BigInteger(l, new Random());  
-            
-        }
-        
+       
         return temp;
     }
 
     private static BigInteger genG_(int l, BigInteger a, BigInteger a_o) {
         BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(n.gcd(temp.add(BigInteger.ONE))!= BigInteger.ONE &&
+        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
                 n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
                 !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a) && temp.equals(a_o));
-                
-        {
-            temp = new BigInteger(l, new Random());  
-            
-        }
         
         return temp;
         
@@ -178,13 +187,10 @@ public class SETUP {
     private static BigInteger genH(int l, BigInteger a, BigInteger a_o, BigInteger g_) {
      BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(n.gcd(temp.add(BigInteger.ONE))!= BigInteger.ONE &&
+        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
                 n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
                 !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a) && temp.equals(a_o) && temp.equals(g_));       
-        {
-            temp = new BigInteger(l, new Random());   
-        }
         
         return temp;
         
@@ -194,15 +200,11 @@ public class SETUP {
     private static BigInteger genB(int l, BigInteger a, BigInteger a_o, BigInteger g_, BigInteger h) {
       BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(n.gcd(temp.add(BigInteger.ONE))!= BigInteger.ONE &&
+        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
                 n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
                 !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a) && temp.equals(a_o) && temp.equals(g_) && temp.equals(h));
-                
-        {
-            temp = new BigInteger(l, new Random());  
-            
-        }
+
         
         return temp;
         
