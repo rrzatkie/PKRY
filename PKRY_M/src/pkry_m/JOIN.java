@@ -8,6 +8,7 @@ package pkry_m;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.Integer.valueOf;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -57,7 +58,7 @@ public class JOIN {
     private static BigInteger s1;
     private static BigInteger s2;
     
-    private static String c_;
+    private static BigInteger c_;
     private static String U_;
     
     
@@ -105,12 +106,17 @@ public class JOIN {
         
         
         
-        C1 = (g_.pow(x.intValue()).multiply(h.pow(r.intValue()))).mod(n);
-        
+       
+        C1 = (g_.modPow(x, n)
+                .multiply(h.modPow(r, n)))
+                .mod(n);
         t1 = genT1(lx , k, eps);
         t2 = genT2(lp , k , eps);
         
-        D= (g_.pow(t1.intValue()).multiply(h.pow(t2.intValue()))).mod(n);
+     
+        D = (g_.modPow(t1, n)
+                .multiply(h.modPow(t2, n)))
+                .mod(n);
         
         StringBuilder c = new StringBuilder();
         
@@ -128,13 +134,12 @@ public class JOIN {
         }
        
         byte[] coded = mda.digest(c.toString().getBytes());
-        c_ = tohexstring(coded);
-        
+       
         s1 = t1.subtract(new BigInteger(coded).multiply(x));
         s2 = t2.subtract(new BigInteger(coded).multiply(r));
         
         StringBuilder U = new StringBuilder();
-        U.append(c_).append("%")
+        U.append(new BigInteger(coded).toString(16)).append("%")
                 .append(s1.toString(16)).append("%")
                 .append(s2.toString(16));
         
@@ -161,6 +166,7 @@ public class JOIN {
         System.out.println("t2= " + t2);
         System.out.println("s1= " + s1);
         System.out.println("s2= " + s2);
+        System.out.println("coded= " + new BigInteger(coded));
         
         
         

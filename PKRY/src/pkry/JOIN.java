@@ -12,6 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +52,8 @@ public class JOIN
     private static BigInteger c;
     private static BigInteger s1;
     private static BigInteger s2;
-    
+    private static BigInteger D_;
+//    private static BigInteger c_2;
     
     private static String c_;
     private static String U;
@@ -116,17 +120,59 @@ public class JOIN
         else 
             System.out.println("C1 nie należy do QR(n)");
         
+        D_= (g_.modPow(s1, n)
+                .multiply(h.modPow(s2, n))
+                .multiply(C1.modPow(c, n)))
+                .mod(n);
+        StringBuilder c_2 = new StringBuilder();
+        c_2.append(g_.toString(2))
+                .append(h.toString(2))
+                .append(C1.toString(2))
+                .append(D_.toString(2));
+        
+        
+        
+        
+        
+        MessageDigest mda = null;
+        try {
+            mda = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(JOIN.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        byte[] coded = mda.digest(c_2.toString().getBytes());
+       
+       
+       
+        
         System.out.println("p_= " + p_);
         System.out.println("q_= " + q_);
         System.out.println("C1= " + C1); 
         System.out.println("c= " + c);
         System.out.println("s1= " + s1);
         System.out.println("s2= " + s2);
+        System.out.println("c_22 = " + new BigInteger(coded));
         
         
         
     }
     
+    
+    public static String tohexstring(byte[] coded)
+    {
+        StringBuffer hexString = new StringBuffer();
+        
+        for (int i = 0; i < coded.length; i++) {
+            if ((0xff & coded[i]) < 0x10) {
+            hexString.append("0" + Integer.toHexString((0xFF & coded[i])));
+            } 
+            else {
+                hexString.append(Integer.toHexString(0xFF & coded[i]));
+            }
+        }
+        return hexString.toString();
+    }
+        
     public static void createFile(String data, String fileName) throws IOException {
         File file = new File(fileName);
         Files.write(file.toPath(), data.getBytes());

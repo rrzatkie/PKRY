@@ -20,12 +20,12 @@ import java.util.logging.Logger;
  */
 public class SETUP {
 
-    public static int lp = 10;
-    public static int k = 8;
-    public static int lx = 6;
-    public static int le = 6;
-    public static int lE = 8;
-    public static int lX = 8;
+    public static int lp = 16;
+    public static int k = 3;
+    public static int lx = 3;
+    public static int le = 3;
+    public static int lE = 7;
+    public static int lX = 6;
     public static int eps = 1;
     
 
