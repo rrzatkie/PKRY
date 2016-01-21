@@ -21,16 +21,17 @@ import java.util.logging.Logger;
 public class SETUP {
 
     public static int lp = 16;
-    public static int k = 3;
-    public static int lx = 3;
-    public static int le = 3;
-    public static int lE = 7;
-    public static int lX = 6;
+    public static int k = 256;
+    public static int lx = 256;
+    public static int le = 256;
+    public static int lE = 512;
+    public static int lX = 512;
     public static int eps = 1;
     
 
     private static final BigInteger TWO = new BigInteger("2");
-
+    private static boolean isPrimeP = false;
+    private static boolean isPrimeQ = false;
     private static BigInteger p_;
     private static BigInteger q_;
     private static BigInteger p;
@@ -44,18 +45,27 @@ public class SETUP {
     private static BigInteger b;
     
     public static void main(String[] args) {
-//        SETUP setup = new SETUP();
-        JOIN join = new JOIN();
+        SETUP setup = new SETUP();
+//        JOIN join = new JOIN();
     }
     
     
     public SETUP()
     {
-          
-        p_=genP_(lp);
-        q_=genQ_(lp);
-        p =  p_.multiply(TWO).add(BigInteger.ONE);
-        q =  q_.multiply(TWO).add(BigInteger.ONE);
+        do{  
+            while(!isPrimeQ){
+                q_=genQ_(lp);
+                q =  q_.multiply(TWO).add(BigInteger.ONE);
+                AKS IsPrimeTest2 = new AKS(q);
+                isPrimeQ = IsPrimeTest2.isPrime();
+            }
+            p_=genP_(lp);
+            p =  p_.multiply(TWO).add(BigInteger.ONE);
+            AKS IsPrimeTest1 = new AKS(p);
+            isPrimeP = IsPrimeTest1.isPrime();
+        }
+        while(!isPrimeP || !isPrimeQ);
+        
         n = p.multiply(q);
         g = genG(n, lp);
         a = g.modPow(TWO, n);
