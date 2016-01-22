@@ -301,7 +301,7 @@ public class GUI_M extends javax.swing.JFrame {
         String[] alfabeta = alfabeta_.split("%");
         alfa = new BigInteger(alfabeta[0], 2);
         beta= new BigInteger(alfabeta[1], 2);
-        
+//        x1 = new BigInteger("3");
         x1 =TWO.pow(lx)
                 .add((alfa.multiply(x).add(beta)).mod(TWO.pow(lx)));
         C2 = a.modPow(x1, n);
@@ -381,6 +381,7 @@ public class GUI_M extends javax.swing.JFrame {
          } catch (IOException ex) {
              Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
          }
+         
          jTextArea1.append("c_11= " + c_11.toString() + "\n");
          jTextArea1.append("c_22= " + c_22.toString() + "\n");
          jTextArea1.append("s11= " + s11.toString() + "\n");
@@ -388,7 +389,7 @@ public class GUI_M extends javax.swing.JFrame {
          jTextArea1.append("s33= " + s33.toString() + "\n");
          jTextArea1.append("V_= " + V_.toString() + "\n");
          jTextArea1.append("W_= " + W_.toString() + "\n");
-        
+         
     }//GEN-LAST:event_jButton2MouseClicked
 
     /**
@@ -452,7 +453,7 @@ public static void createFile(String data, String fileName) throws IOException {
             return null;
         }
     }
-
+    
     private static BigInteger genX(int lx) {
         BigInteger temp = null;
         

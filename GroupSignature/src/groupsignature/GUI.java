@@ -67,7 +67,7 @@ public class GUI extends javax.swing.JFrame {
     private static BigInteger beta;
     
     private static BigInteger C2;
-    private static String[] V_;
+    
     private static String[] W_;
     private static BigInteger c_11;
     private static BigInteger s_1;
@@ -466,9 +466,9 @@ public class GUI extends javax.swing.JFrame {
         String[] proof2 = proof2_.split("#");
         C2 = new BigInteger(proof2[0] , 2);
         
-        V_ = proof2[1].split("%");
-        c_11 = new BigInteger(V_[0]);
-        s_1 = new BigInteger(V_[1]);
+        String V_[] = proof2[1].split("%");
+        c_11 = new BigInteger(V_[0] , 2);
+        s_1 = new BigInteger(V_[1] , 2);
         
         W_ = proof2[2].split("%");
         c_22 = new BigInteger(W_[0] , 2);
@@ -498,12 +498,13 @@ public class GUI extends javax.swing.JFrame {
        
         byte[] coded = mda.digest(c_.toString().getBytes());
         c_33 = new BigInteger(coded);
-         jTextArea1.append("c_11= " + c_11.toString() + "\n");
+        
+        jTextArea1.append("c_11= " + c_11.toString() + "\n");
         jTextArea1.append("c_22= " + c_22.toString() + "\n");
         jTextArea1.append("s11= " + s11.toString() + "\n");
         jTextArea1.append("s22= " + s22.toString() + "\n");
         jTextArea1.append("s33= " + s33.toString() + "\n");
-        jTextArea1.append("c_33= " + c_33 + "\n");
+        jTextArea1.append("c_33= " + c_33.toString() + "\n");
     }//GEN-LAST:event_jButton5MouseClicked
 
     /**
