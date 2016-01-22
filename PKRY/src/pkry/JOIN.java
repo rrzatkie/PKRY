@@ -141,7 +141,14 @@ public class JOIN
             Logger.getLogger(JOIN.class.getName()).log(Level.SEVERE, null, ex);
         }
         byte[] coded = mda.digest(c_2.toString().getBytes());
-       
+        
+        if(checkIfS1(s1,lx,k,eps) && checkIfS2(s2, lp, k, eps))
+        {
+            System.out.println("s1 i s2 nalezy do przedzialu. sukces");
+        }
+        else {
+            System.out.println("s1 i s2 nie nalezy do przedizalu. brak sukcesu");
+        }
        
        
         
@@ -188,7 +195,7 @@ public class JOIN
         }
     }
 
-    private boolean checkIfQRn(BigInteger C1, BigInteger p, BigInteger q_) {
+    private boolean checkIfQRn(BigInteger C1, BigInteger p_, BigInteger q_) {
         
         if(C1.gcd(p_).equals(BigInteger.ONE) && C1.gcd(q_).equals(BigInteger.ONE))
             return true;
@@ -197,6 +204,24 @@ public class JOIN
         System.out.println("NWD(C1,q_)= " + C1.gcd(q_));
             return false;
         }
+    }
+
+    private boolean checkIfS1(BigInteger s1, int lx, int k, int eps) {
+        int pow = lx + k;
+        if(s1.compareTo(TWO.pow(pow).negate()) >= 0
+                && s1.compareTo(TWO.pow(pow*eps).subtract(BigInteger.ONE))<=0)
+            return true;
+        else
+            return false;
+    }
+
+    private boolean checkIfS2(BigInteger s2, int lp, int k, int eps) {
+        int pow = 2*lp + k + 1;
+        if(s2.compareTo(TWO.pow(pow).negate()) >= 0
+                && s2.compareTo(TWO.pow(pow*eps).subtract(BigInteger.ONE))<=0)
+            return true;
+        else
+            return false;
     }
     
 }

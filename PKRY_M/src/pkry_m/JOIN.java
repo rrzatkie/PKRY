@@ -161,7 +161,7 @@ public class JOIN {
         System.out.println("r= " + r);
         System.out.println("c= " + c);
         System.out.println("C1= " + C1);
-        System.out.println("c_= " + c_ );
+        
         System.out.println("t1= " + t1);
         System.out.println("t2= " + t2);
         System.out.println("s1= " + s1);
