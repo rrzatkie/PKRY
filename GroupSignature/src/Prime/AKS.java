@@ -1,4 +1,4 @@
-package pkry.prime;
+package Prime;
 
 import java.math.BigInteger;
 

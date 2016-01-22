@@ -3,23 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkry_m;
-
-import Member.JOIN;
+package groupsignature;
 
 /**
  *
  * @author rafal
  */
-public class PKRY_M {
+public class GroupSignature {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    JOIN join = new JOIN();
-    
-    // TODO code application logic here
+        
+        GUI gui = new GUI();
+        GUI_M gui_m = new GUI_M();
+        // TODO code application logic here
     }
     
 }
