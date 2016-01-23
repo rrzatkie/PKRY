@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkry_m;
+package Member;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.lang.Integer.valueOf;
 
 /**
  *
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
 
 
 
-public class JOIN {
+public class JOIN1 {
     public static int lp; 
     public static int k; 
     public static int lx;
@@ -64,17 +65,13 @@ public class JOIN {
     
     
     
-    public static void main(String[] args)
-    {
-        System.out.println("JOIN");
-        
-    }
     
-    public JOIN(){
+    
+    public JOIN1(){
     try {
             sp_ = getFile("secureparam.txt");
         } catch (IOException ex) {
-            Logger.getLogger(JOIN.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JOIN1.class.getName()).log(Level.SEVERE, null, ex);
         }
         String sp[] = sp_.split("%");
         lp = Integer.parseInt(sp[0] , 2);
@@ -88,7 +85,7 @@ public class JOIN {
         try {
             gpsk_ = getFile("gpsk.txt");
         } catch (IOException ex) {
-            Logger.getLogger(JOIN.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JOIN1.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         String gpsk[] = gpsk_.split("%");
@@ -130,7 +127,7 @@ public class JOIN {
         try {
             mda = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(JOIN.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JOIN1.class.getName()).log(Level.SEVERE, null, ex);
         }
        
         byte[] coded = mda.digest(c.toString().getBytes());
@@ -150,7 +147,7 @@ public class JOIN {
         try {
             createFile(proof.toString() , "proof.txt" );
         } catch (IOException ex) {
-            Logger.getLogger(JOIN.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JOIN1.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
