@@ -100,7 +100,8 @@ public class SIGN {
         }
         byte[] coded = mda.digest(bsn.toString().getBytes());
         //    
-        byte[] slice = Arrays.copyOfRange(coded, 0, 4);
+        byte[] slice = Arrays.copyOfRange(coded, 0, 3);
+        System.out.print(coded);
         BigInteger hsh=new BigInteger(slice);
   //TODO skrócić hsh do 4 B
        f=hsh.modPow(TWO, n) ;
