@@ -5,7 +5,7 @@
  */
 package pkry_m;
 
-import Member.JOIN;
+
 
 /**
  *
@@ -17,7 +17,7 @@ public class PKRY_M {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    JOIN join = new JOIN();
+    SIGN join = new SIGN();
     
     // TODO code application logic here
     }
