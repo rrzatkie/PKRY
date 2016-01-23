@@ -117,6 +117,9 @@ public class VERIFY {
      /**metoda sprawdzająca czy dana liczba z podpisu należy do przedziału [-2^(lp+lx+k+le), 2^(eps*(lx+k+lp+le)-1)] celem weryfikacji*/
     boolean checkIfInRange(BigInteger num,int le,int lx,int k,int eps, int lp)
     {
-        return true;
+        if (((num.compareTo(TWO.pow(eps*(lp+lx+lp+k)).subtract(BigInteger.ONE))) <= 0 ) && !(num.compareTo(TWO.negate().pow(lp+lx+le+k)) >= 0))
+            return true;
+        else
+            return false;
     }
 }
