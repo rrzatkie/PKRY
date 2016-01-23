@@ -6,9 +6,8 @@
 package groupsignature;
 
 
-import Member.JOIN2;
-import static Member.JOIN2.getFile;
-import static Member.JOIN2.lx;
+
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -18,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +34,7 @@ public class GUI_M extends javax.swing.JFrame {
     public static int le;
     public static int lE;
     public static int lX;
-    public static int eps;
+    public static double eps;
 
     
     private static final BigInteger TWO = new BigInteger("2");
@@ -79,6 +79,9 @@ public class GUI_M extends javax.swing.JFrame {
     private static BigInteger s11;
     private static BigInteger s22;
     private static BigInteger s33;
+    private String cridentials_;
+    private static BigInteger A;
+    private static BigInteger e;
     
     
     
@@ -109,6 +112,7 @@ public class GUI_M extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,6 +147,13 @@ public class GUI_M extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jList1);
 
+        jButton5.setText("jButton5");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,18 +163,19 @@ public class GUI_M extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                                .addComponent(jButton3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4))
+                                .addComponent(jButton2))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton5)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
                         .addGap(8, 8, 8)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -179,8 +191,13 @@ public class GUI_M extends javax.swing.JFrame {
                             .addComponent(jButton2)
                             .addComponent(jButton3)
                             .addComponent(jButton4))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton5))))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,7 +221,7 @@ public class GUI_M extends javax.swing.JFrame {
         le = Integer.parseInt(sp[3] , 2);
         lE = Integer.parseInt(sp[4] , 2);
         lX = Integer.parseInt(sp[5] , 2);
-        eps = Integer.parseInt(sp[6] , 2);
+        eps = Double.parseDouble(sp[6]);
         
         try {
             gpsk_ = getFile("gpsk.txt");
@@ -239,13 +256,23 @@ public class GUI_M extends javax.swing.JFrame {
                 .multiply(h.modPow(t2, n)))
                 .mod(n);
         
-        StringBuilder c = new StringBuilder();
+        //StringBuilder c = new StringBuilder();
+        byte[] g_Bytes = g_.toByteArray();
+        byte[] hBytes = h.toByteArray();
+        byte[] C1Bytes = C1.toByteArray();
+        byte[] DBytes = D.toByteArray();
+        byte[] cBytes = new byte[g_Bytes.length + hBytes.length + C1Bytes.length + DBytes.length];
         
-        c.append(g_.toString(2))
-                .append(h.toString(2))
-                .append(C1.toString(2))
-                .append(D.toString(2));
+        System.arraycopy(g_Bytes, 0, cBytes, 0, g_Bytes.length);
+        System.arraycopy(hBytes, 0 , cBytes, g_Bytes.length , hBytes.length);
+        System.arraycopy(C1Bytes, 0, cBytes, g_Bytes.length+hBytes.length, C1Bytes.length);
+        System.arraycopy(DBytes, 0, cBytes, g_Bytes.length+hBytes.length+C1Bytes.length, DBytes.length);
         
+//        c.append(g_.toString(2))
+//                .append(h.toString(2))
+//                .append(C1.toString(2))
+//                .append(D.toString(2));
+//        
         MessageDigest mda = null;
       
         try {
@@ -254,19 +281,19 @@ public class GUI_M extends javax.swing.JFrame {
             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
        
-        byte[] coded = mda.digest(c.toString().getBytes());
+        byte[] coded = mda.digest(cBytes);
        
         s1 = t1.subtract(new BigInteger(coded).multiply(x));
         s2 = t2.subtract(new BigInteger(coded).multiply(r));
         
         StringBuilder U = new StringBuilder();
-        U.append(new BigInteger(coded).toString(16)).append("%")
-                .append(s1.toString(16)).append("%")
-                .append(s2.toString(16));
+        U.append(new BigInteger(coded).toString(2)).append("%")
+                .append(s1.toString(2)).append("%")
+                .append(s2.toString(2));
         
         StringBuilder proof = new StringBuilder();
         proof.append(U.toString()).append("#")
-                .append(C1.toString(16));
+                .append(C1.toString(2));
         
         try {
             createFile(proof.toString() , "proof.txt" );
@@ -277,7 +304,7 @@ public class GUI_M extends javax.swing.JFrame {
         
         
         
-        
+//        jTextArea1.append("x= " + x.byteValueExact() + "\n");
         jTextArea1.append("x= " + x + "\n");
         jTextArea1.append("r= " + r + "\n");
         jTextArea1.append("c= " + c + "\n");
@@ -287,7 +314,7 @@ public class GUI_M extends javax.swing.JFrame {
         jTextArea1.append("t2= " + t2 + "\n");
         jTextArea1.append("s1= " + s1 + "\n");
         jTextArea1.append("s2= " + s2 + "\n");
-        jTextArea1.append("coded= " + new BigInteger(coded) + "\n");
+        jTextArea1.append("c= " + new BigInteger(coded) + "\n");
     // TODO add your handling code here:
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -296,26 +323,46 @@ public class GUI_M extends javax.swing.JFrame {
         try {
             alfabeta_ = getFile("alfabeta.txt");
         } catch (IOException ex) {
-            Logger.getLogger(JOIN2.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
         String[] alfabeta = alfabeta_.split("%");
         alfa = new BigInteger(alfabeta[0], 2);
         beta= new BigInteger(alfabeta[1], 2);
 //        x1 = new BigInteger("3");
-        x1 =TWO.pow(lx)
-                .add((alfa.multiply(x).add(beta)).mod(TWO.pow(lx)));
+        x1 =TWO.pow(lX)
+                .add(alfa.multiply(x).mod(TWO.pow(lx))).add(beta.mod(TWO.pow(lx)));
+        System.out.println("x1= " + x1);
         C2 = a.modPow(x1, n);
+        // v do POPRAWY !!!!
         v = (alfa.multiply(x).add(beta))
                .modPow((TWO.pow(lx).subtract(BigInteger.ONE)).divide(TWO), TWO.pow(lx));
         r_1 = genR_1(lx , k , eps);
         d_1 = a.modPow(r_1, n);
         
-        StringBuilder c_1 = new StringBuilder();
+        byte[] aBytes = a.toByteArray();
         
-        c_1.append(a.toString(2))
-                .append(g_.toString(2))
-                .append(C2.toString(2))
-                .append(d_1.toString(2));
+        byte[] g_Bytes = g_.toByteArray();
+       
+        byte[] C2Bytes = C2.toByteArray();
+       
+        byte[] d_1Bytes = d_1.toByteArray();
+       
+        byte[] c_1Bytes = new byte[g_Bytes.length + aBytes.length + C2Bytes.length + d_1Bytes.length];
+        
+        System.arraycopy(aBytes, 0, c_1Bytes, 0, aBytes.length);
+        System.out.println(Arrays.toString(c_1Bytes));
+        System.arraycopy(g_Bytes, 0 , c_1Bytes, aBytes.length , g_Bytes.length);
+        System.out.println(Arrays.toString(c_1Bytes));
+        System.arraycopy(C2Bytes, 0, c_1Bytes, aBytes.length+g_Bytes.length, C2Bytes.length);
+        System.out.println(Arrays.toString(c_1Bytes));
+        System.arraycopy(d_1Bytes, 0, c_1Bytes, aBytes.length+g_Bytes.length+C2Bytes.length, d_1Bytes.length);
+        System.out.println(Arrays.toString(c_1Bytes));
+//        StringBuilder c_1 = new StringBuilder();
+//        
+//        c_1.append(a.toString(2))
+//                .append(g_.toString(2))
+//                .append(C2.toString(2))
+//                .append(d_1.toString(2));
         
         MessageDigest mda = null;
       
@@ -325,9 +372,16 @@ public class GUI_M extends javax.swing.JFrame {
             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
        
-        byte[] coded = mda.digest(c_1.toString().getBytes());
+        byte[] coded = mda.digest(c_1Bytes);
         c_11 = new BigInteger(coded);
-        s_1 = r_1.subtract((c_11.multiply((x1.subtract(TWO.pow(lx))))));
+        System.out.println(Arrays.toString(c_11.toByteArray()));
+        System.out.println(Arrays.toString(coded));
+        BigInteger temp1,temp2,temp3;
+        temp1 = x1.subtract(TWO.pow(lX));
+        temp2 = c_11.multiply(temp1);
+        temp3 = r_1.subtract(temp2);
+        s_1 = temp3;
+        //s_1 = r_1.subtract(c_11.multiply((x1.subtract(TWO.pow(lX)))));
         
         StringBuilder V_ = new StringBuilder();
         V_.append(c_11.toString(2)).append("%")
@@ -346,24 +400,39 @@ public class GUI_M extends javax.swing.JFrame {
                 .multiply(g_.modPow((TWO.pow(lx)).multiply(r2), n))
                 .multiply(h.modPow(r3, n)))
                 .mod(n);
-        StringBuilder c_2 = new StringBuilder();
-        c_2.append(a.toString(2))
-                .append(g_.toString(2))
-                .append(h.toString(2))
-                .append(C1.toString(2))
-                .append(C2.toString(2))
-                .append(d1.toString(2))
-                .append(d2.toString(2));
+        byte[] hBytes = h.toByteArray();
+        byte[] C1Bytes = C1.toByteArray();
+        byte[] d1Bytes = d1.toByteArray();
+        byte[] d2Bytes = d2.toByteArray();
+        byte[] c_2Bytes = new byte[aBytes.length + g_Bytes.length + hBytes.length + 
+                C1Bytes.length + C2Bytes.length + d1Bytes.length + d2Bytes.length];
+        System.arraycopy(aBytes, 0, c_2Bytes, 0, aBytes.length);
+        System.arraycopy(g_Bytes, 0, c_2Bytes, aBytes.length, g_Bytes.length);
+        System.arraycopy(hBytes, 0, c_2Bytes, aBytes.length+g_Bytes.length, hBytes.length);
+        System.arraycopy(C1Bytes, 0, c_2Bytes, aBytes.length+g_Bytes.length+hBytes.length, C1Bytes.length);
+        System.arraycopy(C2Bytes, 0, c_2Bytes, aBytes.length+g_Bytes.length+hBytes.length+C1Bytes.length, C2Bytes.length);
+        System.arraycopy(d1Bytes, 0, c_2Bytes, aBytes.length+g_Bytes.length+hBytes.length+C1Bytes.length+C2Bytes.length, d1Bytes.length);
+        System.arraycopy(d2Bytes, 0, c_2Bytes, aBytes.length+g_Bytes.length+hBytes.length+C1Bytes.length+C2Bytes.length + d1Bytes.length, d2Bytes.length);
+        
+        
+//        StringBuilder c_2 = new StringBuilder();
+//        c_2.append(a.toString(2))
+//                .append(g_.toString(2))
+//                .append(h.toString(2))
+//                .append(C1.toString(2))
+//                .append(C2.toString(2))
+//                .append(d1.toString(2))
+//                .append(d2.toString(2));
         
         MessageDigest mda2 = null;
         try {
             mda2 = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException ex) {
+         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
-        byte[] coded2 = mda2.digest(c_2.toString().getBytes());
+        byte[] coded2 = mda2.digest(c_2Bytes);
         c_22 = new BigInteger(coded2);
-        s11 = r1.subtract(c_22.multiply(x1.subtract(TWO.pow(lx))));
+        s11 = r1.subtract(c_22.multiply(x1.subtract(TWO.pow(lX))));
         s22 = r2.subtract(c_22.multiply(v));
         s33 = r3.subtract(c_22.multiply(alfa.multiply(r)));
         
@@ -382,15 +451,36 @@ public class GUI_M extends javax.swing.JFrame {
              Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
          }
          
+         
          jTextArea1.append("c_11= " + c_11.toString() + "\n");
+         jTextArea1.append("s_1= " + s_1.toString() + "\n");
+         
          jTextArea1.append("c_22= " + c_22.toString() + "\n");
          jTextArea1.append("s11= " + s11.toString() + "\n");
          jTextArea1.append("s22= " + s22.toString() + "\n");
          jTextArea1.append("s33= " + s33.toString() + "\n");
          jTextArea1.append("V_= " + V_.toString() + "\n");
          jTextArea1.append("W_= " + W_.toString() + "\n");
+         jTextArea1.append("c_1Bytes.length= " + c_1Bytes.length + "\n");
          
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+         try {
+                cridentials_ = getFile("cridentials.txt");
+         } catch (IOException ex) {
+             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         String[] cridentials = cridentials_.split("%");
+         A = new BigInteger(cridentials[0] , 2);
+         e = new BigInteger(cridentials[1] , 2);
+//         if (A.pow(e.) == (a_o.mod(n).multiply(a_o.modPow(x1, n))).mod(n))
+//             jTextArea1.append("Bajlando");
+//         else
+//             jTextArea1.append("NIE bajlando");
+//         
+        
+    }//GEN-LAST:event_jButton5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -432,6 +522,7 @@ public class GUI_M extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -470,15 +561,16 @@ public static void createFile(String data, String fileName) throws IOException {
         BigInteger temp = null;
         do{
             temp = new BigInteger(n.bitLength(), new Random());
+            System.out.println("n.bit =" + n.bitLength());
         }
         while(!(temp.compareTo(TWO.multiply(n).subtract(BigInteger.ONE)) <= 0 )
                 && !(temp.compareTo(BigInteger.ZERO)== 1));
         return temp;
     }
-    private static BigInteger genT1(int lx, int k, int eps)
+    private static BigInteger genT1(int lx, int k, double eps)
     {
         BigInteger temp = null;
-        int pow = eps*(lx + k);
+        int pow = (int) (eps*(lx + k));
        
         do{
             temp = new BigInteger(pow, new Random());
@@ -489,10 +581,10 @@ public static void createFile(String data, String fileName) throws IOException {
         return temp;
     }
     
-    private static BigInteger genT2(int lp, int k, int eps)
+    private static BigInteger genT2(int lp, int k, double eps)
     {
         BigInteger temp = null;
-        int pow = eps*(2*lp + k + 1);
+        int pow = (int) (eps*(2*lp + k + 1));
        
         do{
             temp = new BigInteger(pow, new Random());
@@ -503,9 +595,9 @@ public static void createFile(String data, String fileName) throws IOException {
         return temp;
     }
 
-    private BigInteger genR_1(int lx, int k, int eps) {
+    private BigInteger genR_1(int lx, int k, double eps) {
         BigInteger temp = null;
-        int pow = eps*(lx + k);
+        int pow = (int) (eps*(lx + k));
        
         do{
             temp = new BigInteger(pow, new Random());
@@ -516,9 +608,9 @@ public static void createFile(String data, String fileName) throws IOException {
         return temp;
     }
 
-    private BigInteger genR1(int lx, int k, int eps) {
+    private BigInteger genR1(int lx, int k, double eps) {
         BigInteger temp = null;
-        int pow = eps*(lx + k);
+        int pow = (int) (eps*(lx + k));
        
         do{
             temp = new BigInteger(pow, new Random());
@@ -529,9 +621,9 @@ public static void createFile(String data, String fileName) throws IOException {
         return temp;
     }
 
-    private BigInteger genR2(int lx, int k, int eps) {
+    private BigInteger genR2(int lx, int k, double eps) {
         BigInteger temp = null;
-        int pow = eps*(lx + k);
+        int pow = (int) (eps*(lx + k));
        
         do{
             temp = new BigInteger(pow, new Random());
@@ -542,9 +634,9 @@ public static void createFile(String data, String fileName) throws IOException {
         return temp;
     }
 
-    private BigInteger genR3(int lp, int lx, int k, int eps) {
+    private BigInteger genR3(int lp, int lx, int k, double eps) {
         BigInteger temp = null;
-        int pow = eps*(2*lp + k + 1);
+        int pow = (int) (eps*(2*lp + k + lx + 1));
        
         do{
             temp = new BigInteger(pow, new Random());

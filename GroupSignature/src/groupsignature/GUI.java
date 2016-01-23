@@ -30,10 +30,10 @@ public class GUI extends javax.swing.JFrame {
     public static int lp = 16;
     public static int k = 256;
     public static int lx = 256;
-    public static int le = 256;
-    public static int lE = 512;
-    public static int lX = 512;
-    public static int eps = 1;
+    public static int le = 272;
+    public static int lE = 672;
+    public static int lX = 656;
+    public static double eps = 2;
     
 
     private static final BigInteger TWO = new BigInteger("2");
@@ -68,15 +68,26 @@ public class GUI extends javax.swing.JFrame {
     
     private static BigInteger C2;
     
-    private static String[] W_;
+    
     private static BigInteger c_11;
     private static BigInteger s_1;
     private static BigInteger c_22;
+    private static BigInteger c_221;
     private static BigInteger s11;
     private static BigInteger s22;
     private static BigInteger s33;
     private static BigInteger t_;
     private static BigInteger c_33;
+    
+    private static BigInteger t_1;
+    private static BigInteger t_2;
+    private static BigInteger c_44;
+    
+    private static BigInteger e;
+    private static BigInteger d_1;
+    private static BigInteger A;
+    
+    
     /**
      * Creates new form GUI
      */
@@ -207,21 +218,6 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5))
-                                .addGap(30, 138, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -230,9 +226,19 @@ public class GUI extends javax.swing.JFrame {
                             .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                             .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -259,10 +265,10 @@ public class GUI extends javax.swing.JFrame {
         n = p.multiply(q);
         g = genG(n, lp);
         a = g.modPow(TWO, n);
-        a_o = genA_0(lp, a);
-        g_= genG_(lp, a, a_o);
-        h = genH(lp, a, a_o, g_);
-        b = genB(lp, a, a_o, g_, h);
+        a_o = genA_0(lp, a, n);
+        g_= genG_(lp, a, a_o, n);
+        h = genH(lp, a, a_o, g_ ,n );
+        b = genB(lp, a, a_o, g_, h, n);
         
         StringBuilder sp = new StringBuilder();
         sp.append(Integer.toBinaryString(lp)).append("%")
@@ -271,7 +277,7 @@ public class GUI extends javax.swing.JFrame {
                 .append(Integer.toBinaryString(le)).append("%")
                 .append(Integer.toBinaryString(lE)).append("%")
                 .append(Integer.toBinaryString(lX)).append("%")
-                .append(Integer.toBinaryString(eps)).append("%");
+                .append(Double.toString(eps)).append("%");
         try {
             createFile(sp.toString() , "secureparam.txt");
         } catch (IOException ex) {
@@ -354,7 +360,7 @@ public class GUI extends javax.swing.JFrame {
         le = Integer.parseInt(sp[3] , 2);
         lE = Integer.parseInt(sp[4] , 2);
         lX = Integer.parseInt(sp[5] , 2);
-        eps = Integer.parseInt(sp[6] , 2);
+        eps = Double.parseDouble(sp[6]);
         
         try {
             gpsk_ = getFile("gpsk.txt");
@@ -377,14 +383,14 @@ public class GUI extends javax.swing.JFrame {
         }
          
         String proof[] = proof_.split("#");
-        C1 = new BigInteger(proof[1] , 16);
+        C1 = new BigInteger(proof[1] , 2);
         
         String U[] = proof[0].split("%");
-        c = new BigInteger(U[0] , 16);
-        s1 = new BigInteger(U[1] , 16);
-        s2 = new BigInteger(U[2] , 16);
+        c = new BigInteger(U[0] , 2);
+        s1 = new BigInteger(U[1] , 2);
+        s2 = new BigInteger(U[2] , 2);
         
-        if (checkIfQRn(C1 , p_ , q_) == true)
+        if (checkIfQRn(C1 , p , q) == true)
         {
             jTextArea1.append("C1 nalezy do QR(n)\n");
         }
@@ -395,11 +401,22 @@ public class GUI extends javax.swing.JFrame {
                 .multiply(h.modPow(s2, n))
                 .multiply(C1.modPow(c, n)))
                 .mod(n);
-        StringBuilder c_2 = new StringBuilder();
-        c_2.append(g_.toString(2))
-                .append(h.toString(2))
-                .append(C1.toString(2))
-                .append(D_.toString(2));
+        //StringBuilder c_2 = new StringBuilder();
+        byte[] g_Bytes = g_.toByteArray();
+        byte[] hBytes = h.toByteArray();
+        byte[] C1Bytes = C1.toByteArray();
+        byte[] D_Bytes = D_.toByteArray();
+        byte[] c_2Bytes = new byte[g_Bytes.length + hBytes.length + C1Bytes.length + D_Bytes.length];
+        
+        System.arraycopy(g_Bytes, 0, c_2Bytes, 0, g_Bytes.length);
+        System.arraycopy(hBytes, 0 , c_2Bytes, g_Bytes.length , hBytes.length);
+        System.arraycopy(C1Bytes, 0, c_2Bytes, g_Bytes.length+hBytes.length, C1Bytes.length);
+        System.arraycopy(D_Bytes, 0, c_2Bytes, g_Bytes.length+hBytes.length+C1Bytes.length, D_Bytes.length);
+        
+//        c_2.append(g_.toString(2))
+//                .append(h.toString(2))
+//                .append(C1.toString(2))
+//                .append(D_.toString(2));
         
         
         
@@ -411,7 +428,8 @@ public class GUI extends javax.swing.JFrame {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        byte[] coded = mda.digest(c_2.toString().getBytes());
+        byte[] coded = mda.digest(c_2Bytes);
+        c_221 = new BigInteger(coded); 
         
         if(checkIfS1(s1,lx,k,eps) && checkIfS2(s2, lp, k, eps))
         {
@@ -438,19 +456,9 @@ public class GUI extends javax.swing.JFrame {
         jTextArea1.append("c= " + c + "\n");
         jTextArea1.append("s1= " + s1 + "\n");
         jTextArea1.append("s2= " + s2 + "\n");
-        jTextArea1.append("c_22 = " + new BigInteger(coded) + "\n");
+        jTextArea1.append("c_221 = " + c_221+ "\n");
         jTextArea1.append("alfa= " + alfa + "\n");
         jTextArea1.append("beta= " + beta + "\n");
-        
-//        System.out.println("p_= " + p_);
-//        System.out.println("q_= " + q_);
-//        System.out.println("C1= " + C1); 
-//        System.out.println("c= " + c);
-//        System.out.println("s1= " + s1);
-//        System.out.println("s2= " + s2);
-//        System.out.println("c_22 = " + new BigInteger(coded));
-//        System.out.println("alfa= " + alfa);
-//        System.out.println("beta= " + beta);
         
     }//GEN-LAST:event_jButton2MouseClicked
 
@@ -466,17 +474,17 @@ public class GUI extends javax.swing.JFrame {
         String[] proof2 = proof2_.split("#");
         C2 = new BigInteger(proof2[0] , 2);
         
-        String V_[] = proof2[1].split("%");
+        String[] V_ = proof2[1].split("%");
         c_11 = new BigInteger(V_[0] , 2);
         s_1 = new BigInteger(V_[1] , 2);
         
-        W_ = proof2[2].split("%");
+        String[] W_ = proof2[2].split("%");
         c_22 = new BigInteger(W_[0] , 2);
         s11 = new BigInteger(W_[1] , 2);
         s22 = new BigInteger(W_[2] , 2);
         s33 = new BigInteger(W_[3] , 2);
         
-        if(checkIfQRn(C2 , p_ , q_))
+        if(checkIfQRn(C2 , p , q))
             System.out.println("C2 nalezy do QR(n)");
         else
             System.out.println("C2 nie nalezy do QR(n)");
@@ -484,27 +492,97 @@ public class GUI extends javax.swing.JFrame {
         t_ = (C2.modPow(c_11, n)
                 .multiply(a.modPow(s_1, n)))
                 .mod(n);
-        StringBuilder c_ = new StringBuilder();
-        c_.append(a.toString(2))
-                .append(g_.toString(2))
-                .append(C2.toString(2))
-                .append(t_.toString(2));
-        MessageDigest mda = null;
+        
+        byte[] aBytes = a.toByteArray();
+        byte[] g_Bytes = g_.toByteArray();
+        byte[] C2Bytes = C2.toByteArray();
+        byte[] t_Bytes = t_.toByteArray();
+        byte[] c_Bytes = new byte[g_Bytes.length + aBytes.length + C2Bytes.length + t_Bytes.length];
+        
+        System.arraycopy(aBytes, 0, c_Bytes, 0, aBytes.length);
+        System.arraycopy(g_Bytes, 0 , c_Bytes, aBytes.length , g_Bytes.length);
+        System.arraycopy(C2Bytes, 0, c_Bytes, aBytes.length+g_Bytes.length, C2Bytes.length);
+        System.arraycopy(t_Bytes, 0, c_Bytes, aBytes.length+g_Bytes.length+C2Bytes.length, t_Bytes.length);
+        
+//        StringBuilder c_ = new StringBuilder();
+//        c_.append(a.toString(2))
+//                .append(g_.toString(2))
+//                .append(C2.toString(2))
+//                .append(t_.toString(2));
+        MessageDigest mda3 = null;
         try {
-            mda = MessageDigest.getInstance("SHA-256");
+            mda3 = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
        
-        byte[] coded = mda.digest(c_.toString().getBytes());
-        c_33 = new BigInteger(coded);
+        byte[] coded3 = mda3.digest(c_Bytes);
+        c_33 = new BigInteger(coded3);
         
+        if (checkifS_1(s_1, lx , k , eps))
+            System.out.println("s_1 nalezy do przedzialu. sukces\n");
+        else
+            System.out.println("s_1 nie nalezy do przedzialu. brak sukcesu\n");
+        
+        t_1 = ((C2.divide(a.pow(TWO.pow(lX).intValue())))
+                .modPow(c_22, n).multiply(a.modPow(s_1, n)))
+                .mod(n);
+        t_2 = (C1.modPow(alfa.multiply(c_22), n)
+                .multiply(g_.modPow(beta.multiply(c_22), n))
+                .multiply(g_.modPow(s11, n))
+                .multiply(g_.modPow(TWO.pow(lx).multiply(s22), n))
+                .multiply(h.modPow(s33, n)))
+                .mod(n);
+        
+        byte[] hBytes = h.toByteArray();
+        byte[] C1Bytes = C1.toByteArray();
+        byte[] t_1Bytes = t_1.toByteArray();
+        byte[] t_2Bytes = t_2.toByteArray();
+        byte[] c_44Bytes = new byte[aBytes.length + g_Bytes.length + hBytes.length + C1Bytes.length + C2Bytes.length + t_1Bytes.length + t_2Bytes.length];
+        
+        System.arraycopy(aBytes, 0, c_44Bytes, 0, aBytes.length);
+        System.arraycopy(g_Bytes, 0 , c_44Bytes, aBytes.length , g_Bytes.length);
+        System.arraycopy(hBytes, 0, c_44Bytes, aBytes.length + g_Bytes.length, hBytes.length);
+        System.arraycopy(C1Bytes, 0, c_44Bytes, aBytes.length + g_Bytes.length +hBytes.length, C1Bytes.length);
+        System.arraycopy(C2Bytes, 0, c_44Bytes,  aBytes.length + g_Bytes.length +hBytes.length+C1Bytes.length, C2Bytes.length);
+        System.arraycopy(t_1Bytes, 0, c_44Bytes,  aBytes.length + g_Bytes.length +hBytes.length+C1Bytes.length+C2Bytes.length, t_1Bytes.length);
+        System.arraycopy(t_2Bytes, 0, c_44Bytes,  aBytes.length + g_Bytes.length +hBytes.length+C1Bytes.length+C2Bytes.length+t_1Bytes.length, t_2Bytes.length);
+        
+        byte[] coded4 = mda3.digest(c_44Bytes);
+        c_44 = new BigInteger(coded4);
+        
+        if(checkIfS11(s11, lx , k , eps) && checkIfS22(s22, lx, k, eps) && checkIfS33(s33, lx, k, lp , eps))
+            jTextArea1.append("s11 s22 s33 należa do przedziałów. sukces\n");
+        else
+            jTextArea1.append("s11 s22 s33 NIE należa do przedziałów. brak sukcesu\n");
+        
+        e = genE(lE , le);
+        d_1 = BigInteger.ONE.divide(e).mod(p_.multiply(q_));
+        A = a_o.multiply(C2).modPow(d_1, n);
+        System.out.println("d_1= " + d_1);
+        System.out.println("A = " + A + "\n");
+        StringBuilder cridentials_ = new StringBuilder();
+        cridentials_.append(A.toString(2)).append("%")
+                .append(e.toString(2));
+        
+        try {
+            createFile (cridentials_.toString() , "cridentials.txt");
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        jTextArea1.append("C2= " + C2 + "\n");
         jTextArea1.append("c_11= " + c_11.toString() + "\n");
+        jTextArea1.append("s_1= " + s_1.toString() + "\n");
         jTextArea1.append("c_22= " + c_22.toString() + "\n");
         jTextArea1.append("s11= " + s11.toString() + "\n");
         jTextArea1.append("s22= " + s22.toString() + "\n");
         jTextArea1.append("s33= " + s33.toString() + "\n");
         jTextArea1.append("c_33= " + c_33.toString() + "\n");
+        jTextArea1.append("c_Bytes.length= " + c_Bytes.length + "\n");
+        //jTextArea1.append("c_= " + c_.toString() + "\n" );
+        jTextArea1.append("V_[0]= " + V_[0] + "\n");
+        jTextArea1.append("c_44= " + c_44 + "\n");
     }//GEN-LAST:event_jButton5MouseClicked
 
     /**
@@ -609,53 +687,53 @@ public static void createFile(String data, String fileName) throws IOException {
         return rnd; 
     }
 
-    private static BigInteger genA_0(int l, BigInteger a) {
+    private static BigInteger genA_0(int l, BigInteger a, BigInteger n1) {
       BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
+        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
+                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
+                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a));
                 
        
-        return temp;
+        return temp.modPow(TWO, n1);
     }
 
-    private static BigInteger genG_(int l, BigInteger a, BigInteger a_o) {
+    private static BigInteger genG_(int l, BigInteger a, BigInteger a_o, BigInteger n1) {
         BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
+        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
+                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
+                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a) && temp.equals(a_o));
         
-        return temp;
+        return temp.modPow(TWO, n1);
         
     }
 
-    private static BigInteger genH(int l, BigInteger a, BigInteger a_o, BigInteger g_) {
+    private static BigInteger genH(int l, BigInteger a, BigInteger a_o, BigInteger g_, BigInteger n1) {
      BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
+        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
+                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
+                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a) && temp.equals(a_o) && temp.equals(g_));       
         
-        return temp;
+        return temp.modPow(TWO, n1);
         
         
     }
 
-    private static BigInteger genB(int l, BigInteger a, BigInteger a_o, BigInteger g_, BigInteger h) {
+    private static BigInteger genB(int l, BigInteger a, BigInteger a_o, BigInteger g_, BigInteger h, BigInteger n1) {
       BigInteger temp = null;
         do { temp = new BigInteger(l , new Random());}
-        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) &&
+        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
+                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
+                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
                 temp.equals(a) && temp.equals(a_o) && temp.equals(g_) && temp.equals(h));
 
         
-        return temp;
+        return temp.modPow(TWO, n1);
     }
     private boolean checkIfQRn(BigInteger C1, BigInteger p_, BigInteger q_) {
         
@@ -668,19 +746,19 @@ public static void createFile(String data, String fileName) throws IOException {
         }
     }
 
-    private boolean checkIfS1(BigInteger s1, int lx, int k, int eps) {
+    private boolean checkIfS1(BigInteger s1, int lx, int k, double eps) {
         int pow = lx + k;
         if(s1.compareTo(TWO.pow(pow).negate()) >= 0
-                && s1.compareTo(TWO.pow(pow*eps).subtract(BigInteger.ONE))<=0)
+                && s1.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
             return true;
         else
             return false;
     }
 
-    private boolean checkIfS2(BigInteger s2, int lp, int k, int eps) {
+    private boolean checkIfS2(BigInteger s2, int lp, int k, double eps) {
         int pow = 2*lp + k + 1;
         if(s2.compareTo(TWO.pow(pow).negate()) >= 0
-                && s2.compareTo(TWO.pow(pow*eps).subtract(BigInteger.ONE))<=0)
+                && s2.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
             return true;
         else
             return false;
@@ -709,6 +787,55 @@ public static void createFile(String data, String fileName) throws IOException {
         while(!((temp.compareTo(TWO.pow(pow).subtract(BigInteger.ONE))) <= 0 )
                 && !(temp.compareTo(BigInteger.ZERO) >= 0));
         
+        return temp;
+    }
+
+    private boolean checkifS_1(BigInteger s_1, int lx, int k, double eps) {
+        int pow = lx + k;
+        if(s_1.compareTo(TWO.pow(pow).negate()) >= 0
+                && s_1.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+            return true;
+        else
+            return false;
+    }
+
+    private boolean checkIfS11(BigInteger s11, int lx, int k, double eps) {
+        int pow = lx + k;
+        if(s11.compareTo(TWO.pow(pow).negate()) >= 0
+                && s11.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+            return true;
+        else
+            return false;
+    }
+    
+    private boolean checkIfS22(BigInteger s22, int lx, int k, double eps) {
+        int pow = lx + k;
+        if(s22.compareTo(TWO.pow(pow).negate()) >= 0
+                && s22.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+            return true;
+        else
+            return false;
+    }
+
+    private boolean checkIfS33(BigInteger s33, int lx, int k, int lp, double eps) {
+        int pow = lx + k + 2*lp + 1;
+        if(s33.compareTo(TWO.pow(pow).negate()) >= 0
+                && s33.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+            return true;
+        else
+            return false;
+    }
+
+    private BigInteger genE(int lE, int le) {
+        BigInteger temp = null; 
+        
+       
+        do{
+            temp = new BigInteger(lE, new Random());
+        }
+        while(!((temp.compareTo(TWO.pow(lE).add(TWO.pow(le)).subtract(BigInteger.ONE))) <= 0 )
+                && !(temp.compareTo(TWO.pow(lE).subtract(TWO.pow(le)).add(BigInteger.ONE)) >= 0));
+        System.out.println("e= " + temp);
         return temp;
     }
 
