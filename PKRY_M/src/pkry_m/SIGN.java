@@ -31,7 +31,7 @@ public class SIGN {
     /** klucz publiczny grupy*/
      public  static BigInteger n;
      public  static BigInteger a;
-    public  static BigInteger a_o;
+    public  static BigInteger a_o; 
      public  static BigInteger g_;
      public  static BigInteger h;
      public  static BigInteger b;
@@ -81,7 +81,7 @@ public class SIGN {
         b = new BigInteger(gpsk[5] , 2);
        // bsn=new BigInteger(u[2], 16);
        //TODO wczytać plik z kluczem prywatnym uczestnika grupy jako e, x , Ag
-       /**wartosci wczytane to teraz generujemy nasze liczby*/
+       
        //f=(H(bsn))^2 mod(n)
        try {
               msk= getFile("msk.txt");
@@ -103,8 +103,10 @@ public class SIGN {
         byte[] slice = Arrays.copyOfRange(coded, 0, 3);
         System.out.print(coded);
         BigInteger hsh=new BigInteger(slice);
+        /**wartosci wczytane to teraz generujemy nasze liczby*/
   //TODO skrócić hsh do 4 B
        f=hsh.modPow(TWO, n) ;
+       
        w1=genRandom(1,2*lp, 0,0,0);
        w2=genRandom(1,2*lp, 0,0,0);
        w3=genRandom(1,2*lp, 0,0,0);
