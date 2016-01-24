@@ -101,8 +101,9 @@ public class SIGN {
         byte[] coded = mda.digest(bsn.toString().getBytes());
         //    
         byte[] slice = Arrays.copyOfRange(coded, 0, 3);
-        System.out.print(coded);
+        //System.out.print(coded);
         BigInteger hsh=new BigInteger(slice);
+        System.out.println(hsh);
         /**wartosci wczytane to teraz generujemy nasze liczby*/
   //TODO skrócić hsh do 4 B
        f=hsh.modPow(TWO, n) ;
@@ -110,7 +111,7 @@ public class SIGN {
        w1=genRandom(1,2*lp, 0,0,0);
        w2=genRandom(1,2*lp, 0,0,0);
        w3=genRandom(1,2*lp, 0,0,0);
-       T1=Ag.multiply(b.modPow(w1,n));
+       T1=(Ag.mod(n).multiply(b.modPow(w1,n))).mod(n);
       
        // (g_.modPow(s1, n)
        T2=(g_.modPow(w1,n).multiply(h.modPow(w2,n))).mod(n);
@@ -139,6 +140,7 @@ public class SIGN {
        c.append(a).append(a_o).append(g_).append(h).append(T1).append(T3).append(T4).append(d1).append(d2).append(d3).append(d4).append(d5).append(m);
        byte[] hashed = mda.digest(c.toString().getBytes());
        BigInteger hshm= new BigInteger( hashed);
+       System.out.println(hshm);
        BigInteger s1=r1.subtract(hshm.multiply(e.subtract(TWO.pow(lE))));
        BigInteger s2=r2.subtract(hshm.multiply(x.subtract(TWO.pow(lX))));
        BigInteger s3=r3.subtract(hshm.multiply(w1));

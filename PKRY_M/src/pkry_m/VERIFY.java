@@ -52,6 +52,7 @@ public class VERIFY {
     private final BigInteger T2;
     private final BigInteger T3;
     private final BigInteger T4;
+    private static String m="chujnia";
     
      public VERIFY()
      {
@@ -93,7 +94,7 @@ public class VERIFY {
         c = new BigInteger(sign[0]);
         s1 = new BigInteger(sign[1]);
         s2 = new BigInteger(sign[2]);
-        s3 = new BigInteger(sign[4]);
+        s3 = new BigInteger(sign[3]);
         s4= new BigInteger(sign[4]);
         s5= new BigInteger(sign[5]);
         s9= new BigInteger(sign[6]);
@@ -112,7 +113,22 @@ public class VERIFY {
         byte[] coded = mda.digest(bsn.getBytes());
         byte[] slice = Arrays.copyOfRange(coded, 0, 3);
         BigInteger hsh=new BigInteger(slice);
+        System.out.println(hsh);
         f=hsh.modPow(TWO, n) ;
+        /**arametry t*/
+        //t1
+        BigInteger mian1=(a.modPow((s2.subtract(c.multiply(TWO.pow(lX)))).negate(), n).multiply(b.modPow(s9.negate(),n))).mod(n);
+        BigInteger mian=(g_.modPow(s9.negate(), n).multiply(h.modPow(s10.negate(),n))).mod(n);
+        BigInteger t1=(T1.modPow(s1.subtract(c.multiply(TWO.pow(lE))), n).multiply(a_o.modPow(c,n)).multiply(mian)).mod(n);
+        BigInteger t2=(T2.modPow(s1.subtract(c.multiply(TWO.pow(lE))), n).multiply(mian)).mod(n);
+        BigInteger t3=((T2.modPow(c,n).multiply(g_.modPow(s3, n)).multiply(h.modPow(s4, n)))).mod(n);   
+        BigInteger t4=((T3.modPow(c,n).multiply(g_.modPow(s1.subtract(c.multiply(TWO.pow(lE))), n)).multiply(h.modPow(s5, n)))).mod(n); 
+        BigInteger t5=(T4.modPow(c, n).multiply(f.modPow(s2.subtract(c.multiply(TWO.pow(lX))),n))).mod(n);
+        StringBuilder cbdr=new StringBuilder();
+        cbdr.append(a.toString()).append(a_o.toString()).append(g_.toString()).append(h.toString()).append(T1.toString()).append(T3.toString()).append(T4.toString()).append(t1.toString()).append(t2.toString()).append(t3.toString()).append(t4.toString()).append(t5.toString()).append(m);
+        byte[] hashed = mda.digest(cbdr.toString().getBytes());
+        BigInteger cprim= new BigInteger( hashed);
+        System.out.println(cprim);
      }
      /**metoda sprawdzająca czy dana liczba z podpisu należy do przedziału [-2^(lp+lx+k+le), 2^(eps*(lx+k+lp+le)-1)] celem weryfikacji*/
     boolean checkIfInRange(BigInteger num,int le,int lx,int k,int eps, int lp)
