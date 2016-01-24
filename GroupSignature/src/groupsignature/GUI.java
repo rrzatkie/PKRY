@@ -27,13 +27,13 @@ import java.util.logging.Logger;
 public class GUI extends javax.swing.JFrame {
 
     
-    public static int lp = 16;
-    public static int k = 256;
-    public static int lx = 256;
-    public static int le = 272;
-    public static int lE = 672;
-    public static int lX = 656;
-    public static double eps = 2;
+    public static int lp = 8;
+    public static int k = 8;
+    public static int lx = 8;
+    public static int le = 8;
+    public static int lE = 8;
+    public static int lX = 8;
+    public static double eps = 1;
     
 
     private static final BigInteger TWO = new BigInteger("2");
@@ -557,7 +557,7 @@ public class GUI extends javax.swing.JFrame {
             jTextArea1.append("s11 s22 s33 NIE należa do przedziałów. brak sukcesu\n");
         
         e = genE(lE , le);
-        d_1 = BigInteger.ONE.divide(e).mod(p_.multiply(q_));
+        d_1 = BigInteger.ONE.divide(e.mod(p_.multiply(q_)));
         A = a_o.multiply(C2).modPow(d_1, n);
         System.out.println("d_1= " + d_1);
         System.out.println("A = " + A + "\n");
@@ -828,13 +828,16 @@ public static void createFile(String data, String fileName) throws IOException {
 
     private BigInteger genE(int lE, int le) {
         BigInteger temp = null; 
-        
+        boolean isPrime = false;
        
         do{
-            temp = new BigInteger(lE, new Random());
+            temp = new BigInteger(lE, 100 , new Random());
+            AKS IsPrimeTest = new AKS(temp);
+            isPrime = IsPrimeTest.isPrime();
         }
         while(!((temp.compareTo(TWO.pow(lE).add(TWO.pow(le)).subtract(BigInteger.ONE))) <= 0 )
-                && !(temp.compareTo(TWO.pow(lE).subtract(TWO.pow(le)).add(BigInteger.ONE)) >= 0));
+                && !(temp.compareTo(TWO.pow(lE).subtract(TWO.pow(le)).add(BigInteger.ONE)) >= 0)
+                && !isPrime);
         System.out.println("e= " + temp);
         return temp;
     }
