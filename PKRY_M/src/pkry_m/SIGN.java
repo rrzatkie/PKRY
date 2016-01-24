@@ -81,7 +81,7 @@ public class SIGN {
         b = new BigInteger(gpsk[5] , 2);
        // bsn=new BigInteger(u[2], 16);
        //TODO wczytać plik z kluczem prywatnym uczestnika grupy jako e, x , Ag
-       
+       System.out.println(a);
        //f=(H(bsn))^2 mod(n)
        try {
               msk= getFile("msk.txt");
@@ -117,6 +117,7 @@ public class SIGN {
        T2=(g_.modPow(w1,n).multiply(h.modPow(w2,n))).mod(n);
        T3=(g_.modPow(e,n).multiply(h.modPow(w3,n))).mod(n);
        T4=f.modPow(x, n);
+        System.out.println(T1 + " " + T2 + " " +T3 + " " +T4 );
        /**gererujemy r-y ktore przydadza sie przy liczeniu parametrów d*/
        BigInteger r1=genRandom(eps,0,k,0,le );
        BigInteger r2=genRandom(eps,0,k,lx,0 );
@@ -136,8 +137,10 @@ public class SIGN {
         BigInteger mian2=(g_.modPow(r9.negate(), n).multiply(h.modPow(r10.negate(),n))).mod(n);
        BigInteger d1 = (T2.modPow(r1, n).multiply(mian2)).mod(n);
        /**c=*/
+       System.out.println(d1 + " " + d2 + " " +d3 + " " +d4 + " " +d5);
        StringBuilder c = new StringBuilder();
-       c.append(a).append(a_o).append(g_).append(h).append(T1).append(T3).append(T4).append(d1).append(d2).append(d3).append(d4).append(d5).append(m);
+       c.append(a).append(a_o.toString()).append(g_.toString()).append(h.toString()).append(T1.toString()).append(T3.toString()).append(T4.toString()).append(d1.toString()).append(d2.toString()).append(d3.toString()).append(d4.toString()).append(d5.toString()).append(m);
+       System.out.println(c);
        byte[] hashed = mda.digest(c.toString().getBytes());
        BigInteger hshm= new BigInteger( hashed);
        System.out.println(hshm);

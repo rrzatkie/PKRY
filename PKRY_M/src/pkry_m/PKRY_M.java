@@ -18,6 +18,7 @@ public class PKRY_M {
      */
     public static void main(String[] args) {
     SIGN join = new SIGN();
+    VERIFY verify = new VERIFY();
     
     // TODO code application logic here
     }
