@@ -132,7 +132,11 @@ public class VERIFY {
         System.out.println(cbdr);
         byte[] hashed = mda.digest(cbdr.toString().getBytes());
         BigInteger cprim= new BigInteger( hashed);
-        System.out.println(cprim);
+        System.out.println(s3);
+        System.out.println(TWO.pow(eps*(2*lp+k)).subtract(BigInteger.ONE));
+        System.out.println(checkIfInRange(s3, le, 0,k,1,2*lp));
+        System.out.println(checkIfInRange(s9, le, 0,k,1,2*lp));
+        
      }
      /**metoda sprawdzająca czy dana liczba z podpisu należy do przedziału [-2^(lp+lx+k+le), 2^(eps*(lx+k+lp+le)-1)] celem weryfikacji*/
     boolean checkIfInRange(BigInteger num,int le,int lx,int k,int eps, int lp)
@@ -141,5 +145,12 @@ public class VERIFY {
             return true;
         else
             return false;
+    }
+    private boolean validateRange(BigInteger s1,BigInteger s2,BigInteger s3, BigInteger s4 ,BigInteger s5, BigInteger s9, BigInteger s10  )
+    {
+    if (/*checkIfInRange(s1,le, 0, 0)*/true)
+        return true;
+    else
+        return false;
     }
 }
