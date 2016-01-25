@@ -20,7 +20,7 @@ import static pkry_m.SIGN.getFile;
  * @author emonsko
  */
 public class VERIFY {
-    private  static String bsn ="dupa";
+    private  static String bsn ="11";
     private  static BigInteger f;
      private static final BigInteger TWO = new BigInteger("2");
       /** security parameters*/
@@ -53,7 +53,7 @@ public class VERIFY {
     private final BigInteger T3;
     private final BigInteger T4;
     
-    private static String m="chujnia";
+    private static String m="wiadomosc";
     
      public VERIFY()
      {
