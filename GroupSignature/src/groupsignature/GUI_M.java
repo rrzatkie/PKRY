@@ -267,7 +267,7 @@ public class GUI_M extends javax.swing.JFrame {
         System.arraycopy(hBytes, 0 , cBytes, g_Bytes.length , hBytes.length);
         System.arraycopy(C1Bytes, 0, cBytes, g_Bytes.length+hBytes.length, C1Bytes.length);
         System.arraycopy(DBytes, 0, cBytes, g_Bytes.length+hBytes.length+C1Bytes.length, DBytes.length);
-        
+        System.out.println("cBytes = " + cBytes.length);
 //        c.append(g_.toString(2))
 //                .append(h.toString(2))
 //                .append(C1.toString(2))
@@ -329,8 +329,7 @@ public class GUI_M extends javax.swing.JFrame {
         alfa = new BigInteger(alfabeta[0], 2);
         beta= new BigInteger(alfabeta[1], 2);
 //        x1 = new BigInteger("3");
-        x1 =TWO.pow(lX)
-                .add(alfa.multiply(x).mod(TWO.pow(lx))).add(beta.mod(TWO.pow(lx)));
+        x1 =TWO.pow(lX).add(((alfa.multiply(x).mod(TWO.pow(lx))).add(beta.mod(TWO.pow(lx)))).mod(TWO.pow(lx)));
         System.out.println("x1= " + x1);
         C2 = a.modPow(x1, n);
         // v do POPRAWY !!!!

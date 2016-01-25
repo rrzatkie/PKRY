@@ -27,13 +27,13 @@ import java.util.logging.Logger;
 public class GUI extends javax.swing.JFrame {
 
     
-    public static int lp = 8;
-    public static int k = 8;
-    public static int lx = 8;
-    public static int le = 8;
-    public static int lE = 8;
-    public static int lX = 8;
-    public static double eps = 1;
+    public static int lp = 16;
+    public static int k = 256;
+    public static int lx = 256;
+    public static int le = 256;
+    public static int lE = 256;
+    public static int lX = 256;
+    public static double eps = 5/4;
     
 
     private static final BigInteger TWO = new BigInteger("2");
@@ -412,7 +412,7 @@ public class GUI extends javax.swing.JFrame {
         System.arraycopy(hBytes, 0 , c_2Bytes, g_Bytes.length , hBytes.length);
         System.arraycopy(C1Bytes, 0, c_2Bytes, g_Bytes.length+hBytes.length, C1Bytes.length);
         System.arraycopy(D_Bytes, 0, c_2Bytes, g_Bytes.length+hBytes.length+C1Bytes.length, D_Bytes.length);
-        
+        System.out.println("c_2Bytes= " + c_2Bytes.length);
 //        c_2.append(g_.toString(2))
 //                .append(h.toString(2))
 //                .append(C1.toString(2))
@@ -556,8 +556,9 @@ public class GUI extends javax.swing.JFrame {
         else
             jTextArea1.append("s11 s22 s33 NIE należa do przedziałów. brak sukcesu\n");
         
-        e = genE(lE , le);
-        d_1 = BigInteger.ONE.divide(e.mod(p_.multiply(q_)));
+        //e = genE(lE , le);
+        e = new BigInteger("12345667");
+        d_1 = (BigInteger.ONE.mod(n).multiply(e.modPow(BigInteger.ONE.negate(), n))).mod(n);
         A = a_o.multiply(C2).modPow(d_1, n);
         System.out.println("d_1= " + d_1);
         System.out.println("A = " + A + "\n");
