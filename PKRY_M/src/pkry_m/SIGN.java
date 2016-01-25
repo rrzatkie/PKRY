@@ -42,14 +42,14 @@ public class SIGN {
      public  static BigInteger Ag;
 
      /**linking base*/
-     private  static String bsn ="dupa";
+     private  static String bsn ="11";
      private  static BigInteger f;
      private static BigInteger w1, w2, w3;
      private static BigInteger T1, T2, T3, T4;
     private static BigInteger s1, s2, s3, s4, s5, s9, s10;
     private static String gprk, msk;
     private static String s_;
-    private static String m="chujnia";
+    private static String m="wiadomosc";
     public SIGN()
     {
         try {
