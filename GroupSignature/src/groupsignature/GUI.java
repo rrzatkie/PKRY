@@ -143,7 +143,12 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("OPEN");
+        jButton4.setText("EXIT");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setBackground(new java.awt.Color(255, 204, 204));
         jTextArea1.setColumns(20);
@@ -654,6 +659,10 @@ public class GUI extends javax.swing.JFrame {
             jTextArea1.append("Weryfikacja niepoprawna!\n");
         }
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
