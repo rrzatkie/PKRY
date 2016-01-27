@@ -451,7 +451,7 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
-        jTextArea1.append("---------------JOIN2---------------\n");
+        jTextArea1.append("---------------JOIN2---------------\n\n");
 
         try {
             proof2_ = getFile("proof2.txt");
@@ -571,6 +571,7 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        jTextArea1.append("---------------VERIFY---------------\n\n");
         String signature = null;
         try {
             signature = getFile("signature.txt");
@@ -606,7 +607,7 @@ public class GUI extends javax.swing.JFrame {
         System.out.println(hsh);
         f = hsh.modPow(TWO, n);
         
-        jTextArea1.append("f = " + f);
+        jTextArea1.append("f = " + f + "\n");
         jTextArea1.append("Uruchomiono generację t1-t5!\n");
 
         //t1
@@ -642,6 +643,16 @@ public class GUI extends javax.swing.JFrame {
                 {
                      jTextArea1.append("Weryfikacja przeszła pomyślnie!\n");
                 }
+        else{ 
+            System.out.println(checkIfInRange(s1, le, 0, k, eps, 0));
+         System.out.println(checkIfInRange(s2, 0, lx, k, eps, 0));
+        System.out.println(checkIfInRange(s3, 0, 0, k, eps, 2 * lp));
+         System.out.println(checkIfInRange(s4, 0, 0, k, eps, 2 * lp));
+         System.out.println(checkIfInRange(s5, 0, 0, k, eps, 2 * lp));
+         System.out.println(checkIfInRange(s9, le, 0, k, eps, 2 * lp));
+         System.out.println(checkIfInRange(s10, le, 0, k, eps, 2 * lp));
+            jTextArea1.append("Weryfikacja niepoprawna!\n");
+        }
     }//GEN-LAST:event_jButton3MouseClicked
 
     /**

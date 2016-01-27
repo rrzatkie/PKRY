@@ -497,7 +497,7 @@ public GUI_M() {
          */
 
         f = hsh.modPow(TWO, n);
-        jTextArea1.append("f = " + f);
+        jTextArea1.append("f = " + f + "\n");
         w1 = genRandom(1, 2 * lp, 0, 0, 0);
         w2 = genRandom(1, 2 * lp, 0, 0, 0);
         w3 = genRandom(1, 2 * lp, 0, 0, 0);
@@ -566,7 +566,7 @@ public GUI_M() {
         } catch (IOException ex) {
             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
-         jTextArea1.append("Wygenerowano sygnaturę = (c, s1,s2,s3,s4,s5,s9,s10 ! (signature.txt) \n");
+         jTextArea1.append("Wygenerowano sygnaturę = (c, s1,s2,s3,s4,s5,s9,s10) ! (signature.txt) \n");
     }//GEN-LAST:event_jButton3MouseClicked
 
     /**
