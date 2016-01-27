@@ -5,7 +5,6 @@
  */
 package groupsignature;
 
-
 import Prime.AKS;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,15 +26,13 @@ import java.util.logging.Logger;
  */
 public class GUI extends javax.swing.JFrame {
 
-    
     public static int lp = 16;
     public static int k = 256;
     public static int lx = 256;
     public static int le = 256;
-    public static int lE = 256;
-    public static int lX = 256;
-    public static double eps = 5/4;
-    
+    public static int lE = 512;
+    public static int lX = 512;
+    public static double eps = 5 / 4;
 
     private static final BigInteger TWO = new BigInteger("2");
     private static boolean isPrimeP = false;
@@ -53,9 +51,9 @@ public class GUI extends javax.swing.JFrame {
     private static BigInteger x;
     private static BigInteger r;
     private static BigInteger C1;
-    
-    private static String sp_ , gpsk_ , proof_ , gmsk_ , proof2_;
-    
+
+    private static String sp_, gpsk_, proof_, gmsk_, proof2_;
+
     private static BigInteger t1;
     private static BigInteger t2;
     private static BigInteger D;
@@ -65,10 +63,9 @@ public class GUI extends javax.swing.JFrame {
     private static BigInteger D_;
     private static BigInteger alfa;
     private static BigInteger beta;
-    
+
     private static BigInteger C2;
-    
-    
+
     private static BigInteger c_11;
     private static BigInteger s_1;
     private static BigInteger c_22;
@@ -78,16 +75,18 @@ public class GUI extends javax.swing.JFrame {
     private static BigInteger s33;
     private static BigInteger t_;
     private static BigInteger c_33;
-    
+
     private static BigInteger t_1;
     private static BigInteger t_2;
     private static BigInteger c_44;
-    
+
     private static BigInteger e;
     private static BigInteger d_1;
     private static BigInteger A;
-    
-    
+
+    private static String signature, bsn = "11";
+    private static BigInteger f;
+
     /**
      * Creates new form GUI
      */
@@ -95,9 +94,7 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
         this.setVisible(true);
         this.setTitle("Group Manager");
-        
-        
-        
+
     }
 
     /**
@@ -119,10 +116,9 @@ public class GUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        fileList = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -141,9 +137,15 @@ public class GUI extends javax.swing.JFrame {
         });
 
         jButton3.setText("VERIFY");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         jButton4.setText("OPEN");
 
+        jTextArea1.setBackground(new java.awt.Color(255, 204, 204));
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
@@ -158,22 +160,26 @@ public class GUI extends javax.swing.JFrame {
         jLabel4.setText("LOG");
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane3.setViewportView(jList1);
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane4.setViewportView(jList2);
-
         jLabel3.setText("Members");
 
         jLabel5.setText("Files to Verify");
+
+        String path = "./signed_messages/";
+        File folder = new File(path);
+        StringBuilder files_ = new StringBuilder();
+        File[] filesArray = folder.listFiles();
+        for(File file : filesArray)
+        {
+            files_.append("%").append(file.getName());
+        }
+        String[] files_string_array = files_.toString().split("%");
+        fileList.setModel(new javax.swing.DefaultComboBoxModel<>(files_string_array));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,30 +193,25 @@ public class GUI extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel5)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel4))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 44, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(86, 86, 86))))))
+                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                    .addComponent(fileList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 91, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,22 +220,23 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                .addComponent(fileList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -246,30 +248,30 @@ public class GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-       
-        jTextArea1.append("---------------SETUP---------------\n");
-        do{  
-            while(!isPrimeQ){
-                q_=genQ_(lp);
-                q =  q_.multiply(TWO).add(BigInteger.ONE);
+
+        jTextArea1.append(
+        "---------------SETUP---------------\n\n");
+        do {
+            while (!isPrimeQ) {
+                q_ = genQ_(lp);
+                q = q_.multiply(TWO).add(BigInteger.ONE);
                 AKS IsPrimeTest2 = new AKS(q);
                 isPrimeQ = IsPrimeTest2.isPrime();
             }
-            p_=genP_(lp);
-            p =  p_.multiply(TWO).add(BigInteger.ONE);
+            p_ = genP_(lp);
+            p = p_.multiply(TWO).add(BigInteger.ONE);
             AKS IsPrimeTest1 = new AKS(p);
             isPrimeP = IsPrimeTest1.isPrime();
-        }
-        while(!isPrimeP || !isPrimeQ);
-        
+        } while (!isPrimeP || !isPrimeQ);
+
         n = p.multiply(q);
         g = genG(n, lp);
         a = g.modPow(TWO, n);
         a_o = genA_0(lp, a, n);
-        g_= genG_(lp, a, a_o, n);
-        h = genH(lp, a, a_o, g_ ,n );
+        g_ = genG_(lp, a, a_o, n);
+        h = genH(lp, a, a_o, g_, n);
         b = genB(lp, a, a_o, g_, h, n);
-        
+
         StringBuilder sp = new StringBuilder();
         sp.append(Integer.toBinaryString(lp)).append("%")
                 .append(Integer.toBinaryString(k)).append("%")
@@ -279,11 +281,11 @@ public class GUI extends javax.swing.JFrame {
                 .append(Integer.toBinaryString(lX)).append("%")
                 .append(Double.toString(eps)).append("%");
         try {
-            createFile(sp.toString() , "secureparam.txt");
+            createFile(sp.toString(), "secureparam.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         StringBuilder gpsk = new StringBuilder();
         gpsk.append(n.toString(2)).append("%")
                 .append(a.toString(2)).append("%")
@@ -292,22 +294,22 @@ public class GUI extends javax.swing.JFrame {
                 .append(h.toString(2)).append("%")
                 .append(b.toString(2)).append("%");
         StringBuilder gmsk = new StringBuilder();
-        
+
         gmsk.append(p_.toString(2)).append("%")
                 .append(q_.toString(2)).append("%");
-        
+
         try {
-            createFile(gpsk.toString() , "gpsk.txt");
+            createFile(gpsk.toString(), "gpsk.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-         try {
-            createFile(gmsk.toString() , "gmsk.txt");
+
+        try {
+            createFile(gmsk.toString(), "gmsk.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        jTextArea1.append("Generowanie plików zawierających gpsk oraz gmsk!\n");
         jTextArea1.append("p_= " + p_ + "\n");
         jTextArea1.append("q_= " + q_ + "\n");
         jTextArea1.append("p= " + p + "\n");
@@ -319,109 +321,96 @@ public class GUI extends javax.swing.JFrame {
         jTextArea1.append("g_= " + g_ + "\n");
         jTextArea1.append("h= " + h + "\n");
         jTextArea1.append("b= " + b + "\n");
-        
-        
-        
-        
-//        System.out.println("p_= " + p_);
-//        System.out.println("q_= " + q_);
-//        System.out.println("p= " + p);
-//        System.out.println("q= " + q);
-//        System.out.println("n= " + n);
-//        System.out.println("g= " + g);
-//        System.out.println("a= " + a);
-//        System.out.println("a_o= " + a_o);
-//        System.out.println("g_= " + g_);
-//        System.out.println("h= " + h);
-//        System.out.println("b= " + b);
+        jTextArea1.append("Wygenerowano gpsk.txt oraz gmsk.txt!\n");
+
+
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-         jTextArea1.append("---------------JOIN1---------------\n");
-        
+        jTextArea1.append("---------------JOIN1---------------\n\n");
+
         try {
             gmsk_ = getFile("gmsk.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         String gmsk[] = gmsk_.split("%");
-        p_ = new BigInteger(gmsk[0] , 2);
-        q_ = new BigInteger(gmsk[1] , 2);
-        
+        p_ = new BigInteger(gmsk[0], 2);
+        q_ = new BigInteger(gmsk[1], 2);
+
         try {
             sp_ = getFile("secureparam.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         String sp[] = sp_.split("%");
-        lp = Integer.parseInt(sp[0] , 2);
-        k = Integer.parseInt(sp[1] , 2);
-        lx = Integer.parseInt(sp[2] , 2);
-        le = Integer.parseInt(sp[3] , 2);
-        lE = Integer.parseInt(sp[4] , 2);
-        lX = Integer.parseInt(sp[5] , 2);
+        lp = Integer.parseInt(sp[0], 2);
+        k = Integer.parseInt(sp[1], 2);
+        lx = Integer.parseInt(sp[2], 2);
+        le = Integer.parseInt(sp[3], 2);
+        lE = Integer.parseInt(sp[4], 2);
+        lX = Integer.parseInt(sp[5], 2);
         eps = Double.parseDouble(sp[6]);
-        
+
         try {
             gpsk_ = getFile("gpsk.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         String gpsk[] = gpsk_.split("%");
-        n = new BigInteger(gpsk[0] , 2);
-        a = new BigInteger(gpsk[1] , 2);
-        a_o = new BigInteger(gpsk[2] , 2);
-        g_ = new BigInteger(gpsk[3] , 2);
-        h = new BigInteger(gpsk[4] , 2);
-        b = new BigInteger(gpsk[5] , 2);
-        
-         try {
+        n = new BigInteger(gpsk[0], 2);
+        a = new BigInteger(gpsk[1], 2);
+        a_o = new BigInteger(gpsk[2], 2);
+        g_ = new BigInteger(gpsk[3], 2);
+        h = new BigInteger(gpsk[4], 2);
+        b = new BigInteger(gpsk[5], 2);
+
+        try {
             proof_ = getFile("proof.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
+
         String proof[] = proof_.split("#");
-        C1 = new BigInteger(proof[1] , 2);
-        
+        C1 = new BigInteger(proof[1], 2);
+
         String U[] = proof[0].split("%");
-        c = new BigInteger(U[0] , 2);
-        s1 = new BigInteger(U[1] , 2);
-        s2 = new BigInteger(U[2] , 2);
+        c = new BigInteger(U[0], 2);
+        s1 = new BigInteger(U[1], 2);
+        s2 = new BigInteger(U[2], 2);
+        jTextArea1.append("Otrzymano proof of knowledge U!\n");
         
-        if (checkIfQRn(C1 , p , q) == true)
-        {
+        if (checkIfQRn(C1, p, q) == true) {
             jTextArea1.append("C1 nalezy do QR(n)\n");
-        }
-        else 
+        } else {
             jTextArea1.append("C1 nie należy do QR(n)\n");
+        }
+        jTextArea1.append("Rozpoczęto weryfikację proof of knowledge U!\n");
+        try {
+            D_ = (g_.modPow(s1, n)
+                    .multiply(h.modPow(s2, n))
+                    .multiply(C1.modPow(c, n)))
+                    .mod(n);
+        } catch (Exception ex) {
+        }
         
-        D_= (g_.modPow(s1, n)
-                .multiply(h.modPow(s2, n))
-                .multiply(C1.modPow(c, n)))
-                .mod(n);
-        //StringBuilder c_2 = new StringBuilder();
         byte[] g_Bytes = g_.toByteArray();
         byte[] hBytes = h.toByteArray();
         byte[] C1Bytes = C1.toByteArray();
         byte[] D_Bytes = D_.toByteArray();
         byte[] c_2Bytes = new byte[g_Bytes.length + hBytes.length + C1Bytes.length + D_Bytes.length];
-        
+
         System.arraycopy(g_Bytes, 0, c_2Bytes, 0, g_Bytes.length);
-        System.arraycopy(hBytes, 0 , c_2Bytes, g_Bytes.length , hBytes.length);
-        System.arraycopy(C1Bytes, 0, c_2Bytes, g_Bytes.length+hBytes.length, C1Bytes.length);
-        System.arraycopy(D_Bytes, 0, c_2Bytes, g_Bytes.length+hBytes.length+C1Bytes.length, D_Bytes.length);
+        System.arraycopy(hBytes, 0, c_2Bytes, g_Bytes.length, hBytes.length);
+        System.arraycopy(C1Bytes, 0, c_2Bytes, g_Bytes.length + hBytes.length, C1Bytes.length);
+        System.arraycopy(D_Bytes, 0, c_2Bytes, g_Bytes.length + hBytes.length + C1Bytes.length, D_Bytes.length);
         System.out.println("c_2Bytes= " + c_2Bytes.length);
 //        c_2.append(g_.toString(2))
 //                .append(h.toString(2))
 //                .append(C1.toString(2))
 //                .append(D_.toString(2));
-        
-        
-        
-        
-        
+
         MessageDigest mda = null;
         try {
             mda = MessageDigest.getInstance("SHA-256");
@@ -429,81 +418,82 @@ public class GUI extends javax.swing.JFrame {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         byte[] coded = mda.digest(c_2Bytes);
-        c_221 = new BigInteger(coded); 
+        c_221 = new BigInteger(coded);
         
-        if(checkIfS1(s1,lx,k,eps) && checkIfS2(s2, lp, k, eps))
-        {
-            jTextArea1.append("s1 i s2 nalezy do przedzialu. sukces\n" );
-        }
-        else {
+        if(c_221.equals(c))
+            jTextArea1.append("Sukces, proof of knowledge U zweryfikowany pozytywnie!\n");
+        else
+            jTextArea1.append("Brak sukcesu, proof of knowledge niezgodny!\n");
+
+        if (checkIfS1(s1, lx, k, eps) && checkIfS2(s2, lp, k, eps)) {
+            jTextArea1.append("s1 i s2 nalezy do przedzialu. sukces\n");
+        } else {
             jTextArea1.append("s1 i s2 nie nalezy do przedzialu. brak sukcesu\n");
         }
-        
+        jTextArea1.append("Rozpoczęto generację alfa oraz beta!\n");
         alfa = genAlfa(lx);
         beta = genBeta(lx);
-        
+       
         StringBuilder alfabeta = new StringBuilder();
         alfabeta.append(alfa.toString(2)).append("%")
                 .append(beta.toString(2));
         try {
-            createFile(alfabeta.toString() , "alfabeta.txt" );
+            createFile(alfabeta.toString(), "alfabeta.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        jTextArea1.append("p_= " + p_ + "\n");
-        jTextArea1.append("q_= " + q_ + "\n");
-        jTextArea1.append("C1= " + C1 + "\n");
-        jTextArea1.append("c= " + c + "\n");
-        jTextArea1.append("s1= " + s1 + "\n");
-        jTextArea1.append("s2= " + s2 + "\n");
-        jTextArea1.append("c_221 = " + c_221+ "\n");
         jTextArea1.append("alfa= " + alfa + "\n");
         jTextArea1.append("beta= " + beta + "\n");
+        jTextArea1.append("alfa oraz beta zostały wygenerowane oraz przesłane! (alfabeta.txt)\n");
         
+        
+
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
         jTextArea1.append("---------------JOIN2---------------\n");
-       
+
         try {
             proof2_ = getFile("proof2.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         String[] proof2 = proof2_.split("#");
-        C2 = new BigInteger(proof2[0] , 2);
-        
+        C2 = new BigInteger(proof2[0], 2);
+
         String[] V_ = proof2[1].split("%");
-        c_11 = new BigInteger(V_[0] , 2);
-        s_1 = new BigInteger(V_[1] , 2);
-        
+        c_11 = new BigInteger(V_[0], 2);
+        s_1 = new BigInteger(V_[1], 2);
+
         String[] W_ = proof2[2].split("%");
-        c_22 = new BigInteger(W_[0] , 2);
-        s11 = new BigInteger(W_[1] , 2);
-        s22 = new BigInteger(W_[2] , 2);
-        s33 = new BigInteger(W_[3] , 2);
+        c_22 = new BigInteger(W_[0], 2);
+        s11 = new BigInteger(W_[1], 2);
+        s22 = new BigInteger(W_[2], 2);
+        s33 = new BigInteger(W_[3], 2);
+        jTextArea1.append("Otrzymano C2, V oraz W! \n");
         
-        if(checkIfQRn(C2 , p , q))
-            System.out.println("C2 nalezy do QR(n)");
-        else
-            System.out.println("C2 nie nalezy do QR(n)");
-        
+        if (checkIfQRn(C2, p, q)) {
+            jTextArea1.append("C2 nalezy do QR(n)");
+        } else {
+            jTextArea1.append("C2 nie nalezy do QR(n)");
+        }
+        jTextArea1.append("Rozpoczęto weryfikację proof of knowledge V!\n");
         t_ = (C2.modPow(c_11, n)
                 .multiply(a.modPow(s_1, n)))
                 .mod(n);
-        
+
         byte[] aBytes = a.toByteArray();
         byte[] g_Bytes = g_.toByteArray();
         byte[] C2Bytes = C2.toByteArray();
         byte[] t_Bytes = t_.toByteArray();
         byte[] c_Bytes = new byte[g_Bytes.length + aBytes.length + C2Bytes.length + t_Bytes.length];
-        
+
         System.arraycopy(aBytes, 0, c_Bytes, 0, aBytes.length);
-        System.arraycopy(g_Bytes, 0 , c_Bytes, aBytes.length , g_Bytes.length);
-        System.arraycopy(C2Bytes, 0, c_Bytes, aBytes.length+g_Bytes.length, C2Bytes.length);
-        System.arraycopy(t_Bytes, 0, c_Bytes, aBytes.length+g_Bytes.length+C2Bytes.length, t_Bytes.length);
-        
+        System.arraycopy(g_Bytes, 0, c_Bytes, aBytes.length, g_Bytes.length);
+        System.arraycopy(C2Bytes, 0, c_Bytes, aBytes.length + g_Bytes.length, C2Bytes.length);
+        System.arraycopy(t_Bytes, 0, c_Bytes, aBytes.length + g_Bytes.length + C2Bytes.length, t_Bytes.length);
+
 //        StringBuilder c_ = new StringBuilder();
 //        c_.append(a.toString(2))
 //                .append(g_.toString(2))
@@ -515,15 +505,17 @@ public class GUI extends javax.swing.JFrame {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(GUI_M.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+        
         byte[] coded3 = mda3.digest(c_Bytes);
         c_33 = new BigInteger(coded3);
-        
-        if (checkifS_1(s_1, lx , k , eps))
-            System.out.println("s_1 nalezy do przedzialu. sukces\n");
-        else
-            System.out.println("s_1 nie nalezy do przedzialu. brak sukcesu\n");
-        
+
+        if (checkifS_1(s_1, lx, k, eps)) {
+            jTextArea1.append("s_1 nalezy do przedzialu. sukces\n");
+        } else {
+            jTextArea1.append("s_1 nie nalezy do przedzialu. brak sukcesu\n");
+        }
+        jTextArea1.append("Sukces, proof of knowledge V zweryfikowany pozytywnie!\n");
+        jTextArea1.append("Rozpoczęto weryfikację proof of knowledge W!\n");
         t_1 = ((C2.divide(a.pow(TWO.pow(lX).intValue())))
                 .modPow(c_22, n).multiply(a.modPow(s_1, n)))
                 .mod(n);
@@ -539,52 +531,118 @@ public class GUI extends javax.swing.JFrame {
         byte[] t_1Bytes = t_1.toByteArray();
         byte[] t_2Bytes = t_2.toByteArray();
         byte[] c_44Bytes = new byte[aBytes.length + g_Bytes.length + hBytes.length + C1Bytes.length + C2Bytes.length + t_1Bytes.length + t_2Bytes.length];
-        
+
         System.arraycopy(aBytes, 0, c_44Bytes, 0, aBytes.length);
-        System.arraycopy(g_Bytes, 0 , c_44Bytes, aBytes.length , g_Bytes.length);
+        System.arraycopy(g_Bytes, 0, c_44Bytes, aBytes.length, g_Bytes.length);
         System.arraycopy(hBytes, 0, c_44Bytes, aBytes.length + g_Bytes.length, hBytes.length);
-        System.arraycopy(C1Bytes, 0, c_44Bytes, aBytes.length + g_Bytes.length +hBytes.length, C1Bytes.length);
-        System.arraycopy(C2Bytes, 0, c_44Bytes,  aBytes.length + g_Bytes.length +hBytes.length+C1Bytes.length, C2Bytes.length);
-        System.arraycopy(t_1Bytes, 0, c_44Bytes,  aBytes.length + g_Bytes.length +hBytes.length+C1Bytes.length+C2Bytes.length, t_1Bytes.length);
-        System.arraycopy(t_2Bytes, 0, c_44Bytes,  aBytes.length + g_Bytes.length +hBytes.length+C1Bytes.length+C2Bytes.length+t_1Bytes.length, t_2Bytes.length);
-        
+        System.arraycopy(C1Bytes, 0, c_44Bytes, aBytes.length + g_Bytes.length + hBytes.length, C1Bytes.length);
+        System.arraycopy(C2Bytes, 0, c_44Bytes, aBytes.length + g_Bytes.length + hBytes.length + C1Bytes.length, C2Bytes.length);
+        System.arraycopy(t_1Bytes, 0, c_44Bytes, aBytes.length + g_Bytes.length + hBytes.length + C1Bytes.length + C2Bytes.length, t_1Bytes.length);
+        System.arraycopy(t_2Bytes, 0, c_44Bytes, aBytes.length + g_Bytes.length + hBytes.length + C1Bytes.length + C2Bytes.length + t_1Bytes.length, t_2Bytes.length);
+
         byte[] coded4 = mda3.digest(c_44Bytes);
         c_44 = new BigInteger(coded4);
-        
-        if(checkIfS11(s11, lx , k , eps) && checkIfS22(s22, lx, k, eps) && checkIfS33(s33, lx, k, lp , eps))
+
+        if (checkIfS11(s11, lx, k, eps) && checkIfS22(s22, lx, k, eps) && checkIfS33(s33, lx, k, lp, eps)) {
             jTextArea1.append("s11 s22 s33 należa do przedziałów. sukces\n");
-        else
+        } else {
             jTextArea1.append("s11 s22 s33 NIE należa do przedziałów. brak sukcesu\n");
+        }
+        jTextArea1.append("Sukces, proof of knowledge W zweryfikowany pozytwnie!\n");
+        jTextArea1.append("Rozpoczęto generację e oraz A!\n");
+        e = genE(lE, le);
         
-        //e = genE(lE , le);
-        e = new BigInteger("12345667");
+        jList1.setListData(new String[]{"Member 1"});
+
         d_1 = (BigInteger.ONE.mod(n).multiply(e.modPow(BigInteger.ONE.negate(), n))).mod(n);
         A = a_o.multiply(C2).modPow(d_1, n);
-        System.out.println("d_1= " + d_1);
-        System.out.println("A = " + A + "\n");
-        StringBuilder cridentials_ = new StringBuilder();
-        cridentials_.append(A.toString(2)).append("%")
+        jTextArea1.append("e= " + e + "\n");
+        jTextArea1.append("A = " + A + "\n");
+        StringBuilder msk_ = new StringBuilder();
+        msk_.append(A.toString(2)).append("%")
                 .append(e.toString(2));
-        
         try {
-            createFile (cridentials_.toString() , "cridentials.txt");
+            createFile(msk_.toString(), "msk.txt");
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        jTextArea1.append("C2= " + C2 + "\n");
-        jTextArea1.append("c_11= " + c_11.toString() + "\n");
-        jTextArea1.append("s_1= " + s_1.toString() + "\n");
-        jTextArea1.append("c_22= " + c_22.toString() + "\n");
-        jTextArea1.append("s11= " + s11.toString() + "\n");
-        jTextArea1.append("s22= " + s22.toString() + "\n");
-        jTextArea1.append("s33= " + s33.toString() + "\n");
-        jTextArea1.append("c_33= " + c_33.toString() + "\n");
-        jTextArea1.append("c_Bytes.length= " + c_Bytes.length + "\n");
-        //jTextArea1.append("c_= " + c_.toString() + "\n" );
-        jTextArea1.append("V_[0]= " + V_[0] + "\n");
-        jTextArea1.append("c_44= " + c_44 + "\n");
+        jTextArea1.append("Dodano nowego członka do grupy oraz wysłano (A,e)! (msk.txt)\n");
     }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        String signature = null;
+        try {
+            signature = getFile("signature.txt");
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String sign[] = signature.split("%");
+        c = new BigInteger(sign[0]);
+        BigInteger s1 = new BigInteger(sign[1]);
+        BigInteger s2 = new BigInteger(sign[2]);
+        BigInteger s3 = new BigInteger(sign[3]);
+        BigInteger s4 = new BigInteger(sign[4]);
+        BigInteger s5 = new BigInteger(sign[5]);
+        BigInteger s9 = new BigInteger(sign[6]);
+        BigInteger s10 = new BigInteger(sign[7]);
+        BigInteger T1 = new BigInteger(sign[8]);
+        BigInteger T2 = new BigInteger(sign[9]);
+        BigInteger T3 = new BigInteger(sign[10]);
+        BigInteger T4 = new BigInteger(sign[11]);
+        
+        jTextArea1.append("Wczytano sygnaturę! Rozpoczynamy weryfikację! \n");
+        
+        
+        MessageDigest mda = null;
+        try {
+            mda = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        byte[] coded = mda.digest(bsn.getBytes());
+        byte[] slice = Arrays.copyOfRange(coded, 0, 3);
+        BigInteger hsh = new BigInteger(slice);
+        System.out.println(hsh);
+        f = hsh.modPow(TWO, n);
+        
+        jTextArea1.append("f = " + f);
+        jTextArea1.append("Uruchomiono generację t1-t5!\n");
+
+        //t1
+        BigInteger mian1 = (a.modPow((s2.subtract(c.multiply(TWO.pow(lX)))).negate(), n).multiply(b.modPow(s9.negate(), n))).mod(n);
+        BigInteger mian = (g_.modPow(s9.negate(), n).multiply(h.modPow(s10.negate(), n))).mod(n);
+        BigInteger t1 = (T1.modPow(s1.subtract(c.multiply(TWO.pow(lE))), n).multiply(a_o.modPow(c, n)).multiply(mian)).mod(n);
+        BigInteger t2 = (T2.modPow(s1.subtract(c.multiply(TWO.pow(lE))), n).multiply(mian)).mod(n);
+        BigInteger t3 = ((T2.modPow(c, n).multiply(g_.modPow(s3, n)).multiply(h.modPow(s4, n)))).mod(n);
+        BigInteger t4 = ((T3.modPow(c, n).multiply(g_.modPow(s1.subtract(c.multiply(TWO.pow(lE))), n)).multiply(h.modPow(s5, n)))).mod(n);
+        BigInteger t5 = (T4.modPow(c, n).multiply(f.modPow(s2.subtract(c.multiply(TWO.pow(lX))), n))).mod(n);
+        jTextArea1.append("t1= " + t1 + " \n" + "t2= " + t2 + " \n" + "t3= " + t3 + " \n" + "t4= " + t4 + " \n" + "t5= " + t5 + "\n");
+        StringBuilder cbdr = new StringBuilder();
+        try {
+            cbdr.append(a.toString()).append(a_o.toString()).append(g_.toString())
+                    .append(h.toString()).append(T1.toString()).append(T3.toString())
+                    .append(T4.toString()).append(t1.toString()).append(t2.toString())
+                    .append(t3.toString()).append(t4.toString()).append(t5.toString())
+                    .append(getFile(fileList.getSelectedItem().toString()));
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(cbdr);
+        byte[] hashed = mda.digest(cbdr.toString().getBytes());
+        BigInteger cprim = new BigInteger(hashed);
+        if(
+        (checkIfInRange(s1, le, 0, k, eps, 0))
+        &&(checkIfInRange(s2, 0, lx, k, eps, 0))
+        &&(checkIfInRange(s3, 0, 0, k, eps, 2 * lp))
+        &&(checkIfInRange(s4, 0, 0, k, eps, 2 * lp))
+        &&(checkIfInRange(s5, 0, 0, k, eps, 2 * lp))
+        &&(checkIfInRange(s9, le, 0, k, eps, 2 * lp))
+        &&(checkIfInRange(s10, le, 0, k, eps, 2 * lp)))
+                {
+                     jTextArea1.append("Weryfikacja przeszła pomyślnie!\n");
+                }
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -617,12 +675,13 @@ public class GUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GUI().setVisible(true);
-                
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> fileList;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -632,14 +691,12 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 
-public static String getFile(String filePath) throws IOException {
+    public static String getFile(String filePath) throws IOException {
         Path file = Paths.get(filePath);
         if (file.toFile().exists()) {
             byte[] encoded = Files.readAllBytes(file);
@@ -648,199 +705,221 @@ public static String getFile(String filePath) throws IOException {
             return null;
         }
     }
-public static void createFile(String data, String fileName) throws IOException {
+
+    public static void createFile(String data, String fileName) throws IOException {
         File file = new File(fileName);
         Files.write(file.toPath(), data.getBytes());
     }
-    public static BigInteger genG(BigInteger n, int l)
-    {
+
+    public static BigInteger genG(BigInteger n, int l) {
         BigInteger temp = null;
-        do { temp = new BigInteger(l , new Random());
-}
-        while(!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0) );
-        
+        do {
+            temp = new BigInteger(l, new Random());
+        } while (!(n.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE))
+                && n.gcd(temp.subtract(BigInteger.ONE)) != BigInteger.ONE
+                && !(temp.compareTo(n.subtract(BigInteger.ONE)) <= 0));
+
         return temp;
     }
-    public static BigInteger genP_(int l)
-    {
+
+    public static BigInteger genP_(int l) {
         BigInteger rnd = null;
         boolean isPrime = false;
 
-        while (!isPrime) {
-            rnd = new BigInteger(l, 100, new Random());
-            AKS IsPrimeTest = new AKS(rnd);
-            isPrime = IsPrimeTest.isPrime();
-        }
-        return rnd; 
+//        while (!isPrime) {
+        rnd = new BigInteger(l, 100, new Random());
+//            AKS IsPrimeTest = new AKS(rnd);
+//            isPrime = IsPrimeTest.isPrime();
+//        }
+        return rnd;
     }
-    public static BigInteger genQ_(int l)
-    {
+
+    public static BigInteger genQ_(int l) {
         BigInteger rnd = null;
         boolean isPrime = false;
 
-        while (!isPrime) {
-            rnd = new BigInteger(l, 100, new Random());
-            AKS IsPrimeTest = new AKS(rnd);
-            isPrime = IsPrimeTest.isPrime();
-        }
-        return rnd; 
+//        while (!isPrime) {
+        rnd = new BigInteger(l, 100, new Random());
+//            AKS IsPrimeTest = new AKS(rnd);
+//            isPrime = IsPrimeTest.isPrime();
+//        }
+        return rnd;
     }
 
     private static BigInteger genA_0(int l, BigInteger a, BigInteger n1) {
-      BigInteger temp = null;
-        do { temp = new BigInteger(l , new Random());}
-        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
-                temp.equals(a));
-                
-       
+        BigInteger temp = null;
+        do {
+            temp = new BigInteger(l, new Random());
+        } while (!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE))
+                && n1.gcd(temp.subtract(BigInteger.ONE)) != BigInteger.ONE
+                && !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0)
+                && temp.equals(a));
+
         return temp.modPow(TWO, n1);
     }
 
     private static BigInteger genG_(int l, BigInteger a, BigInteger a_o, BigInteger n1) {
         BigInteger temp = null;
-        do { temp = new BigInteger(l , new Random());}
-        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
-                temp.equals(a) && temp.equals(a_o));
-        
+        do {
+            temp = new BigInteger(l, new Random());
+        } while (!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE))
+                && n1.gcd(temp.subtract(BigInteger.ONE)) != BigInteger.ONE
+                && !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0)
+                && temp.equals(a) && temp.equals(a_o));
+
         return temp.modPow(TWO, n1);
-        
+
     }
 
     private static BigInteger genH(int l, BigInteger a, BigInteger a_o, BigInteger g_, BigInteger n1) {
-     BigInteger temp = null;
-        do { temp = new BigInteger(l , new Random());}
-        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
-                temp.equals(a) && temp.equals(a_o) && temp.equals(g_));       
-        
+        BigInteger temp = null;
+        do {
+            temp = new BigInteger(l, new Random());
+        } while (!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE))
+                && n1.gcd(temp.subtract(BigInteger.ONE)) != BigInteger.ONE
+                && !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0)
+                && temp.equals(a) && temp.equals(a_o) && temp.equals(g_));
+
         return temp.modPow(TWO, n1);
-        
-        
+
     }
 
     private static BigInteger genB(int l, BigInteger a, BigInteger a_o, BigInteger g_, BigInteger h, BigInteger n1) {
-      BigInteger temp = null;
-        do { temp = new BigInteger(l , new Random());}
-        while(!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE)) &&
-                n1.gcd(temp.subtract(BigInteger.ONE))!= BigInteger.ONE &&
-                !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0) &&
-                temp.equals(a) && temp.equals(a_o) && temp.equals(g_) && temp.equals(h));
+        BigInteger temp = null;
+        do {
+            temp = new BigInteger(l, new Random());
+        } while (!(n1.gcd(temp.add(BigInteger.ONE)).equals(BigInteger.ONE))
+                && n1.gcd(temp.subtract(BigInteger.ONE)) != BigInteger.ONE
+                && !(temp.compareTo(n1.subtract(BigInteger.ONE)) <= 0)
+                && temp.equals(a) && temp.equals(a_o) && temp.equals(g_) && temp.equals(h));
 
-        
         return temp.modPow(TWO, n1);
     }
+
     private boolean checkIfQRn(BigInteger C1, BigInteger p_, BigInteger q_) {
-        
-        if(C1.gcd(p_).equals(BigInteger.ONE) && C1.gcd(q_).equals(BigInteger.ONE))
+
+        if (C1.gcd(p_).equals(BigInteger.ONE) && C1.gcd(q_).equals(BigInteger.ONE)) {
             return true;
-        else 
-        {System.out.println("NWD(C1,p_)= " + C1.gcd(p_));
-        System.out.println("NWD(C1,q_)= " + C1.gcd(q_));
+        } else {
+            System.out.println("NWD(C1,p_)= " + C1.gcd(p_));
+            System.out.println("NWD(C1,q_)= " + C1.gcd(q_));
             return false;
         }
     }
 
     private boolean checkIfS1(BigInteger s1, int lx, int k, double eps) {
         int pow = lx + k;
-        if(s1.compareTo(TWO.pow(pow).negate()) >= 0
-                && s1.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+        if (s1.compareTo(TWO.pow(pow).negate()) >= 0
+                && s1.compareTo(TWO.pow((int) (pow * eps)).subtract(BigInteger.ONE)) <= 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     private boolean checkIfS2(BigInteger s2, int lp, int k, double eps) {
-        int pow = 2*lp + k + 1;
-        if(s2.compareTo(TWO.pow(pow).negate()) >= 0
-                && s2.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+        int pow = 2 * lp + k + 1;
+        if (s2.compareTo(TWO.pow(pow).negate()) >= 0
+                && s2.compareTo(TWO.pow((int) (pow * eps)).subtract(BigInteger.ONE)) <= 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     private BigInteger genAlfa(int lx) {
-        BigInteger temp = null; 
+        BigInteger temp = null;
         int pow = lx;
-       
-        do{
+
+        do {
             temp = new BigInteger(pow, new Random());
-        }
-        while(!((temp.compareTo(TWO.pow(pow).subtract(BigInteger.ONE))) <= 0 )
+        } while (!((temp.compareTo(TWO.pow(pow).subtract(BigInteger.ONE))) <= 0)
                 && !(temp.compareTo(BigInteger.ZERO) >= 0));
-        
+
         return temp;
     }
 
     private BigInteger genBeta(int lx) {
-        BigInteger temp = null; 
+        BigInteger temp = null;
         int pow = lx;
-       
-        do{
+
+        do {
             temp = new BigInteger(pow, new Random());
-        }
-        while(!((temp.compareTo(TWO.pow(pow).subtract(BigInteger.ONE))) <= 0 )
+        } while (!((temp.compareTo(TWO.pow(pow).subtract(BigInteger.ONE))) <= 0)
                 && !(temp.compareTo(BigInteger.ZERO) >= 0));
-        
+
         return temp;
     }
 
     private boolean checkifS_1(BigInteger s_1, int lx, int k, double eps) {
         int pow = lx + k;
-        if(s_1.compareTo(TWO.pow(pow).negate()) >= 0
-                && s_1.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+        if (s_1.compareTo(TWO.pow(pow).negate()) >= 0
+                && s_1.compareTo(TWO.pow((int) (pow * eps)).subtract(BigInteger.ONE)) <= 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     private boolean checkIfS11(BigInteger s11, int lx, int k, double eps) {
         int pow = lx + k;
-        if(s11.compareTo(TWO.pow(pow).negate()) >= 0
-                && s11.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+        if (s11.compareTo(TWO.pow(pow).negate()) >= 0
+                && s11.compareTo(TWO.pow((int) (pow * eps)).subtract(BigInteger.ONE)) <= 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
-    
+
     private boolean checkIfS22(BigInteger s22, int lx, int k, double eps) {
         int pow = lx + k;
-        if(s22.compareTo(TWO.pow(pow).negate()) >= 0
-                && s22.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+        if (s22.compareTo(TWO.pow(pow).negate()) >= 0
+                && s22.compareTo(TWO.pow((int) (pow * eps)).subtract(BigInteger.ONE)) <= 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     private boolean checkIfS33(BigInteger s33, int lx, int k, int lp, double eps) {
-        int pow = lx + k + 2*lp + 1;
-        if(s33.compareTo(TWO.pow(pow).negate()) >= 0
-                && s33.compareTo(TWO.pow((int) (pow*eps)).subtract(BigInteger.ONE))<=0)
+        int pow = lx + k + 2 * lp + 1;
+        if (s33.compareTo(TWO.pow(pow).negate()) >= 0
+                && s33.compareTo(TWO.pow((int) (pow * eps)).subtract(BigInteger.ONE)) <= 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     private BigInteger genE(int lE, int le) {
-        BigInteger temp = null; 
+        BigInteger temp = null;
         boolean isPrime = false;
-       
-        do{
-            temp = new BigInteger(lE, 100 , new Random());
-            AKS IsPrimeTest = new AKS(temp);
-            isPrime = IsPrimeTest.isPrime();
-        }
-        while(!((temp.compareTo(TWO.pow(lE).add(TWO.pow(le)).subtract(BigInteger.ONE))) <= 0 )
+
+        do {
+            temp = new BigInteger(lE, 100, new Random());
+//            AKS IsPrimeTest = new AKS(temp);
+//            isPrime = IsPrimeTest.isPrime();
+        } while (!((temp.compareTo(TWO.pow(lE).add(TWO.pow(le)).subtract(BigInteger.ONE))) <= 0)
                 && !(temp.compareTo(TWO.pow(lE).subtract(TWO.pow(le)).add(BigInteger.ONE)) >= 0)
                 && !isPrime);
-        System.out.println("e= " + temp);
+
         return temp;
+    }
+
+    boolean checkIfInRange(BigInteger num, int le, int lx, int k, double eps, int lp) {
+        if (((num.compareTo(TWO.pow((int) eps * (lp + lx + lp + k)).subtract(BigInteger.ONE))) <= 0) && !(num.compareTo(TWO.negate().pow(lp + lx + le + k)) >= 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean validateRange(BigInteger s1, BigInteger s2, BigInteger s3, BigInteger s4, BigInteger s5, BigInteger s9, BigInteger s10) {
+        if (/*checkIfInRange(s1,le, 0, 0)*/true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

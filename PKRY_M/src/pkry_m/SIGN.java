@@ -137,7 +137,7 @@ public class SIGN {
         BigInteger mian2=(g_.modPow(r9.negate(), n).multiply(h.modPow(r10.negate(),n))).mod(n);
        BigInteger d1 = (T2.modPow(r1, n).multiply(mian2)).mod(n);
        /**c=*/
-       System.out.println(d1 + " " + d2 + " " +d3 + " " +d4 + " " +d5);
+       System.out.println("d1= " + d1 + " \n" + "d2= " + d2 + " \n" +"d3= " + d3 + " \n" + "d4= " + d4 + " \n" + "d5= "+ d5);
        StringBuilder c = new StringBuilder();
        c.append(a).append(a_o.toString()).append(g_.toString()).append(h.toString()).append(T1.toString()).append(T3.toString()).append(T4.toString()).append(d1.toString()).append(d2.toString()).append(d3.toString()).append(d4.toString()).append(d5.toString()).append(m);
        System.out.println(c);
